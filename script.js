@@ -1,69 +1,71 @@
-// NAVIGATION
-function showScreen(screenId){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    if(screenId==='game' && cards.length===0) initGame();
+// SCREEN SWITCHING
+function showScreen(id){
+    document.querySelectorAll('.screen').forEach(screen=>{
+        screen.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
 }
 
-// LETTER
+// FRONT PAGE HEARTS
+const heartsContainer = document.getElementById('heartsContainer');
+function createHeart(){
+    const heart = document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*100+'%';
+    heart.style.fontSize=(20+Math.random()*30)+'px';
+    heart.textContent='💖';
+    heart.style.animationDuration=(5+Math.random()*5)+'s';
+    heartsContainer.appendChild(heart);
+    setTimeout(()=>heart.remove(),10000);
+}
+setInterval(createHeart,300);
+
+// LETTER ANIMATION
 function openLetter(){
-    const envelope = document.querySelector('.envelope');
-    const letter = document.getElementById('letterCard');
-    envelope.classList.add('open');
-    setTimeout(()=>{letter.classList.add('show');},600);
+    document.querySelector('.envelope').style.display='none';
+    document.getElementById('letterContent').style.display='block';
+}
+function closeLetter(){
+    document.querySelector('.envelope').style.display='block';
+    document.getElementById('letterContent').style.display='none';
 }
 
-// MEMORY GAME
+// SIMPLE MEMORY GAME
+const gameBoard=document.getElementById('gameBoard');
 let cards=[];
-let flippedCards=[];
-let matchedPairs=0;
-let moves=0;
-let canFlip=true;
-const emojis=['💕','💖','💗','💓','💝','💘','💞','❤️'];
 
-function initGame(){
-    const gameBoard=document.getElementById('gameBoard');
+function createGame(){
+    const symbols=['🍎','🍌','🍇','🍉','🍎','🍌','🍇','🍉'];
+    cards=[];
+    symbols.sort(()=>0.5-Math.random());
     gameBoard.innerHTML='';
-    cards=[]; flippedCards=[]; matchedPairs=0; moves=0; canFlip=true;
-    const cardEmojis=[...emojis,...emojis].sort(()=>Math.random()-0.5);
-    cardEmojis.forEach((emoji,index)=>{
+    symbols.forEach(symbol=>{
         const card=document.createElement('div');
         card.className='game-card';
-        card.dataset.emoji=emoji;
-        card.innerHTML=`<div class="card-back">❓</div><div class="card-front">${emoji}</div>`;
-        card.onclick=()=>flipCard(card);
+        card.textContent='';
+        card.dataset.symbol=symbol;
+        card.addEventListener('click',flipCard);
         gameBoard.appendChild(card);
         cards.push(card);
     });
-    updateStats();
-    document.getElementById('winMessage').classList.remove('show');
 }
-
-function flipCard(card){
-    if(!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-    card.classList.add('flipped');
-    flippedCards.push(card);
-    if(flippedCards.length===2){
-        canFlip=false; moves++; updateStats();
-        setTimeout(checkMatch,600);
+let flipped=[];
+function flipCard(){
+    if(this.textContent || flipped.length===2) return;
+    this.textContent=this.dataset.symbol;
+    flipped.push(this);
+    if(flipped.length===2){
+        setTimeout(checkMatch,500);
     }
 }
-
 function checkMatch(){
-    const [c1,c2]=flippedCards;
-    if(c1.dataset.emoji===c2.dataset.emoji){
-        c1.classList.add('matched'); c2.classList.add('matched');
-        matchedPairs++; updateStats();
-        if(matchedPairs===emojis.length) setTimeout(()=>document.getElementById('winMessage').classList.add('show'),500);
+    if(flipped[0].dataset.symbol===flipped[1].dataset.symbol){
+        flipped.forEach(c=>c.style.visibility='hidden');
     }else{
-        setTimeout(()=>{c1.classList.remove('flipped'); c2.classList.remove('flipped');},400);
+        flipped.forEach(c=>c.textContent='');
     }
-    flippedCards=[]; canFlip=true;
+    flipped=[];
 }
 
-function updateStats(){
-    document.getElementById('moves').textContent=moves;
-    document.getElementById('matches').textContent=`${matchedPairs}/${emojis.length}`;
-}
-
-function resetGame(){initGame();}
+// INITIALIZE GAME WHEN SCREEN OPENS
+document.querySelector('button[onclick*="game"]').addEventListener('click',createGame);
