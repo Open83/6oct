@@ -1,71 +1,94 @@
-// SCREEN SWITCHING
+/* Navigation */
 function showScreen(id){
-    document.querySelectorAll('.screen').forEach(screen=>{
-        screen.classList.remove('active');
-    });
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
-// FRONT PAGE HEARTS
-const heartsContainer = document.getElementById('heartsContainer');
-function createHeart(){
+/* Floating Hearts */
+setInterval(() => {
     const heart = document.createElement('div');
-    heart.className='heart';
-    heart.style.left=Math.random()*100+'%';
-    heart.style.fontSize=(20+Math.random()*30)+'px';
-    heart.textContent='💖';
-    heart.style.animationDuration=(5+Math.random()*5)+'s';
-    heartsContainer.appendChild(heart);
-    setTimeout(()=>heart.remove(),10000);
-}
-setInterval(createHeart,300);
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = 10 + Math.random() * 20 + 'px';
+    heart.textContent = '💖';
+    document.getElementById('floatingHearts').appendChild(heart);
+    setTimeout(()=>heart.remove(), 5000);
+}, 300);
 
-// LETTER ANIMATION
+/* Letter Animation */
+const envelope = document.getElementById('envelope');
+const letterCard = document.getElementById('letterCard');
+
 function openLetter(){
-    document.querySelector('.envelope').style.display='none';
-    document.getElementById('letterContent').style.display='block';
-}
-function closeLetter(){
-    document.querySelector('.envelope').style.display='block';
-    document.getElementById('letterContent').style.display='none';
+    envelope.style.display = 'none';
+    letterCard.classList.remove('hidden');
+    setTimeout(()=>letterCard.classList.add('show'), 50);
 }
 
-// SIMPLE MEMORY GAME
-const gameBoard=document.getElementById('gameBoard');
-let cards=[];
-
-function createGame(){
-    const symbols=['🍎','🍌','🍇','🍉','🍎','🍌','🍇','🍉'];
-    cards=[];
-    symbols.sort(()=>0.5-Math.random());
-    gameBoard.innerHTML='';
-    symbols.forEach(symbol=>{
-        const card=document.createElement('div');
-        card.className='game-card';
-        card.textContent='';
-        card.dataset.symbol=symbol;
-        card.addEventListener('click',flipCard);
-        gameBoard.appendChild(card);
-        cards.push(card);
-    });
+function resetLetter(){
+    letterCard.classList.remove('show');
+    setTimeout(()=>{
+        letterCard.classList.add('hidden');
+        envelope.style.display = 'flex';
+    },600);
 }
-let flipped=[];
-function flipCard(){
-    if(this.textContent || flipped.length===2) return;
-    this.textContent=this.dataset.symbol;
-    flipped.push(this);
-    if(flipped.length===2){
-        setTimeout(checkMatch,500);
+
+/* Spin Wheel Game */
+const wheel = document.getElementById('wheel');
+const ctx = wheel.getContext('2d');
+const segments = [
+    '😍 I love you!',
+    '😏 Kiss me 💋',
+    '🥰 Hug me tightly',
+    '😉 Say something naughty',
+    '💌 Send a love note',
+    '💖 Dance together',
+    '🌹 Compliment me',
+    '💋 Surprise me!'
+];
+const colors = ['#ff4081','#ff69b4','#ffcc00','#1e90ff','#9b59b6','#ff7f50','#ffb6c1','#ff1493'];
+let spinning = false;
+
+function drawWheel(){
+    const len = segments.length;
+    const arc = 2 * Math.PI / len;
+    for(let i=0;i<len;i++){
+        ctx.beginPath();
+        ctx.moveTo(150,150);
+        ctx.arc(150,150,150, i*arc, (i+1)*arc);
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+        ctx.save();
+        ctx.translate(150,150);
+        ctx.rotate((i+0.5)*arc);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(segments[i],140,0);
+        ctx.restore();
     }
 }
-function checkMatch(){
-    if(flipped[0].dataset.symbol===flipped[1].dataset.symbol){
-        flipped.forEach(c=>c.style.visibility='hidden');
-    }else{
-        flipped.forEach(c=>c.textContent='');
-    }
-    flipped=[];
+drawWheel();
+
+function spinWheel(){
+    if(spinning) return;
+    spinning = true;
+    let spinAngle = Math.random()*5000 + 5000;
+    let currentAngle = 0;
+    const spinInterval = setInterval(()=>{
+        currentAngle += spinAngle/60;
+        spinAngle *= 0.94;
+        wheel.style.transform = `rotate(${currentAngle}deg)`;
+        if(spinAngle<0.5){
+            clearInterval(spinInterval);
+            spinning=false;
+            showSpinResult(currentAngle);
+        }
+    },50);
 }
 
-// INITIALIZE GAME WHEN SCREEN OPENS
-document.querySelector('button[onclick*="game"]').addEventListener('click',createGame);
+function showSpinResult(angle){
+    const arc = 360/segments.length;
+    const index = Math.floor(((360 - (angle % 360)) / arc)) % segments.length;
+    document.getElementById('spinMessage').textContent = segments[index];
+}
