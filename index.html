@@ -1,305 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Gift — Envelope + Wheel</title>
-<style>
-:root {
-  --bg: #f4f6f9;
-  --card: #fff;
-  --accent: #c92a2a;
-  --paper: #fffaf2;
-  --muted: #6b6f76;
-  --maxWidth: 980px;
-  --ease: cubic-bezier(.2,.9,.3,1);
-  --env-width: min(90vw,380px);
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-html, body{height:100%;background:var(--bg);font-family:Inter, Arial,sans-serif;color:#111;}
-.wrap{max-width:var(--maxWidth);margin:18px auto;padding:12px}
-
-/* Envelope Area */
-.env-area{display:flex;justify-content:center;align-items:center;padding:18px 0}
-.env-scene{width:var(--env-width);height:calc(var(--env-width)*0.62);position:relative;perspective:2200px;}
-.envelope-wrap{position:relative;width:100%;height:100%;user-select:none;cursor:pointer;}
-.env-pocket{
-  position:absolute;top:12%;left:0;right:0;bottom:6%;
-  border-radius:10px;background:linear-gradient(180deg,#fffefc,#fff9f3);
-  border:1px solid rgba(0,0,0,0.04);box-shadow:inset 0 2px 0 rgba(0,0,0,0.02),0 12px 28px rgba(0,0,0,0.06);
-  overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding-top:18%;z-index:2;
-}
-.env-flap{
-  position:absolute;top:0;left:0;right:0;height:56%;
-  border-top-left-radius:10px;border-top-right-radius:10px;
-  background:linear-gradient(180deg,#fff6f5,#fff0f0);box-shadow:0 14px 40px rgba(0,0,0,0.06);
-  transform-origin:center top;transform:rotateX(0deg) translateZ(36px);
-  transition: transform .7s var(--ease);
-  z-index:8;
-  backface-visibility:hidden;
-}
-.env-flap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(180deg,rgba(255,255,255,0.25),rgba(0,0,0,0.02));}
-.env-seal{
-  position:absolute;top:44%;left:50%;transform:translateX(-50%);
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(180deg,var(--accent),#8a1a1a);
-  display:flex;align-items:center;justify-content:center;color:white;font-weight:900;
-  z-index:9;box-shadow:0 8px 24px rgba(201,42,42,0.22);
-}
-/* Letter */
-.letter{
-  position:absolute;left:10%;right:10%;top:18%;height:60%;
-  background:linear-gradient(180deg,var(--paper),#fff9f0);border-radius:6px;padding:14px;
-  box-shadow:0 18px 50px rgba(12,20,30,0.08);
-  transform-origin:center bottom;transform:translateY(22px) scale(.98);opacity:0;
-  transition: transform .6s var(--ease), opacity .45s var(--ease), box-shadow .3s;
-  z-index:6;overflow:auto;color:#1b1b1b;-webkit-overflow-scrolling:touch;
-}
-.letter h2{font-size:16px;margin-bottom:6px}
-.letter p{font-size:14px;line-height:1.6;white-space:pre-wrap;color:#222;margin:0;}
-.envelope-wrap.open .env-flap{transform:rotateX(-160deg) translateZ(36px);}
-.envelope-wrap.open .letter{transform:translateY(-120px) scale(1);opacity:1;z-index:9;box-shadow:0 36px 90px rgba(12,18,28,0.12);}
-.letter.fold{transform:translateY(20px) scaleY(.8) translateZ(0);opacity:0;transition: transform .48s cubic-bezier(.35,.8,.2,1), opacity .28s linear;}
-
-/* Buttons */
-.controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
-.btn{background:#1f6feb;color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer;box-shadow:0 10px 28px rgba(31,111,235,0.14)}
-.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:#111}
-
-/* Wheel */
-.wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px}
-canvas.wheel{width:min(92vw,420px);height:auto;border-radius:50%;}
-.wheel-pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:30px solid #fff;filter:drop-shadow(0 8px 20px rgba(0,0,0,0.12));margin-bottom:-12px}
-.spin-row{display:flex;gap:10px;align-items:center}
-.muted{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
-
-/* Result Modal */
-.result{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);min-width:260px;background:#fff;border-radius:10px;padding:14px;box-shadow:0 30px 90px rgba(0,0,0,0.18);display:none;z-index:200}
-.result.show{display:block}
-.result h3{margin:0 0 6px 0}
-.result p{margin:0 0 8px 0;color:#444}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Letter & Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="wrap">
-  <!-- LETTER SCREEN -->
-  <div id="letterScreen" class="screen active">
-    <div class="panel">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
-        <div style="flex:1"><h1>Love Letter</h1><div class="small">Tap the envelope or buttons</div></div>
-      </div>
+    <!-- MENU -->
+    <div id="menu" class="screen active">
+        <h1>💖 My Special App 💖</h1>
+        <button onclick="showScreen('letter')">Open Letter ✉️</button>
+        <button onclick="showScreen('game')">Play Memory Game 🎮</button>
+    </div>
 
-      <div class="env-area">
-        <div class="env-scene" id="envScene" tabindex="0">
-          <div class="envelope-wrap" id="envelopeWrap">
-            <div class="env-pocket"></div>
-            <div class="env-flap"></div>
-            <div class="env-seal">❤</div>
-            <article class="letter" id="letter">
-              <h2>Meri Bacchiii ♥️</h2>
-              <p>
+    <!-- LETTER -->
+    <div id="letter" class="screen">
+        <button class="back-btn" onclick="showScreen('menu')">✕</button>
+        <div class="letter-container">
+            <!-- Envelope -->
+            <div class="envelope" onclick="openLetter()">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">💌</div>
+            </div>
+
+            <!-- Letter inside -->
+            <div class="letter-card" id="letterCard">
+                <div class="letter-kitty">😻</div>
+                <div class="letter-title">Meri Bacchiii♥️</div>
+                <div class="letter-content" id="letterContent">
 Saraaaa♥️
-Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha. Tumne aaj call karke sorry bola lekin mujhe bhi sorry kehna hai; shayad main thoda zyada rude ho gaya tha jab mujhe bas shant rehna chahiye tha. Mujhe tumse ladna pasand nahi hai kyunki har baar jab hum door hote hain lagta hai jaise kuch adhura ho gaya ho.
-
-Tum waise hi rare ho — tumhari aankhon ka sukoon, tumhare alfaaz ka warmth. Main seriously blessed hoon. I Lykeeeeee Uuuuu Meri Jaannnn ❤️
-              </p>
-              <div style="text-align:right;margin-top:8px;font-weight:700;color:#444">— Sayed Asif</div>
-            </article>
-          </div>
+Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha...
+I Lykeeeeeeeeeeeeeeeee Uuuuuuuuuuuuuuuuuuhhhhhhhhhhhhhhhhhhhhhh Meri Jaaaaaaaaaaaaaaaaaaaaaaaannnnnnnnnnnnnn❤️💋
+                </div>
+                <div class="letter-signature">With all my love,<br>Sayed Asif</div>
+            </div>
         </div>
-      </div>
-
-      <div class="controls">
-        <button id="openBtn" class="btn">Open</button>
-        <button id="closeBtn" class="btn ghost">Close</button>
-      </div>
     </div>
-  </div>
 
-  <!-- WHEEL SCREEN -->
-  <div id="gameScreen" class="screen">
-    <div class="panel">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
-        <div><h1>Spin the Wheel</h1><div class="small">Elegant gold rim</div></div>
-      </div>
+    <!-- GAME -->
+    <div id="game" class="screen">
+        <button class="back-btn" onclick="showScreen('menu')">✕</button>
+        <div class="game-container">
+            <div class="game-header">
+                <div class="game-kitty">🎮😺</div>
+                <h2 class="game-title">Love Memory Game</h2>
+                <p class="game-subtitle">Match the hearts & win!</p>
+            </div>
 
-      <div class="wheel-wrap">
-        <div class="wheel-pointer"></div>
-        <canvas id="wheelCanvas" class="wheel" width="680" height="680"></canvas>
-        <div class="spin-row" style="margin-top:8px">
-          <button id="spinBtn" class="btn">SPIN</button>
-          <button id="quickBtn" class="btn ghost">QUICK</button>
+            <div class="win-message" id="winMessage">
+                <h3>Congratulations! 🎉</h3>
+                <div class="win-emoji">💖💝💘</div>
+                <p>You found all the matches!<br>You're amazing, just like always! ❤️</p>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-label">Moves</div>
+                    <div class="stat-value" id="moves">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Matches</div>
+                    <div class="stat-value" id="matches">0/8</div>
+                </div>
+            </div>
+
+            <div class="game-board" id="gameBoard"></div>
+            <button class="reset-btn" onclick="resetGame()">🔄 New Game</button>
         </div>
-        <div class="muted">Tap SPIN and wait — the wheel slows naturally.</div>
-      </div>
     </div>
-  </div>
 
-  <div id="result" class="result">
-    <h3 id="resTitle"></h3>
-    <p id="resType"></p>
-    <div style="text-align:center"><button id="resOk" class="btn">OK</button></div>
-  </div>
-</div>
-
-<script>
-/* ---------------- NAV ----------------- */
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-/* --------------- Envelope --------------- */
-const envelopeWrap = document.getElementById('envelopeWrap');
-const envScene = document.getElementById('envScene');
-const openBtn = document.getElementById('openBtn');
-const closeBtn = document.getElementById('closeBtn');
-const letter = document.getElementById('letter');
-
-let envOpen=false, envBusy=false;
-
-function openEnvelope(){
-  if(envBusy||envOpen) return;
-  envBusy=true;
-  envelopeWrap.classList.add('open');
-  setTimeout(()=>{
-    letter.classList.remove('fold');
-    envOpen=true;
-    envBusy=false;
-  },300);
-}
-
-function closeEnvelope(){
-  if(envBusy||!envOpen){
-    envelopeWrap.classList.remove('open');
-    letter.classList.add('fold');
-    envOpen=false;
-    return;
-  }
-  envBusy=true;
-  letter.classList.add('fold');
-  setTimeout(()=>{
-    envelopeWrap.classList.remove('open');
-    setTimeout(()=>{letter.classList.remove('fold');envOpen=false;envBusy=false;},250);
-  },420);
-}
-
-envScene.addEventListener('click', ()=> envOpen?closeEnvelope():openEnvelope());
-openBtn.addEventListener('click', openEnvelope);
-closeBtn.addEventListener('click', closeEnvelope);
-
-/* ----------------- Wheel --------------- */
-const canvas = document.getElementById('wheelCanvas');
-const ctx = canvas.getContext('2d');
-let size = Math.min(window.innerWidth*0.92,680);
-const DPR = window.devicePixelRatio || 1;
-
-function resize(){
-  size = Math.min(window.innerWidth*0.92,680);
-  canvas.style.width = size+'px';
-  canvas.style.height = size+'px';
-  canvas.width = Math.round(size*DPR);
-  canvas.height = Math.round(size*DPR);
-  ctx.setTransform(DPR,0,0,DPR,0,0);
-  drawWheel(currentRotation);
-}
-window.addEventListener('resize', resize);
-resize();
-
-const items=[
-  {text:"Tender kiss", type:"Romantic"},
-  {text:"Sing 1 line", type:"Cute"},
-  {text:"Compliment her", type:"Romantic"},
-  {text:"Slow dance 30s", type:"Cute"},
-  {text:"Long hug", type:"Romantic"},
-  {text:"Share a memory", type:"Cute"},
-  {text:"Cook favorite", type:"Romantic"},
-  {text:"Whisper a secret", type:"Cute"},
-  {text:"Write a note", type:"Romantic"},
-  {text:"Silly selfie", type:"Cute"},
-  {text:"Promise a date", type:"Romantic"},
-  {text:"Do 10 squats", type:"Cute"}
-];
-const n=items.length;
-const slice=(2*Math.PI)/n;
-const palette=['#fff6ee','#fff0f0','#fffaf7','#fff6f1','#fff7f4','#fffaf5'];
-
-let currentRotation=0, spinning=false;
-
-function drawWheel(rot){
-  const w=size, cx=w/2, cy=w/2, rOut=w/2-6;
-  ctx.clearRect(0,0,w,w);
-  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot);
-  for(let i=0;i<n;i++){
-    const a=i*slice;
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,rOut,a,a+slice);
-    ctx.closePath();
-    ctx.fillStyle=palette[i%palette.length];
-    ctx.fill();
-    ctx.strokeStyle='#eee'; ctx.lineWidth=1; ctx.stroke();
-    ctx.save();
-    ctx.rotate(a+slice/2);
-    ctx.fillStyle='#222'; ctx.font='700 16px Inter';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(items[i].text,rOut*0.65,0);
-    ctx.restore();
-  }
-  ctx.beginPath(); ctx.arc(0,0,rOut+4,0,2*Math.PI); ctx.lineWidth=10; ctx.strokeStyle='rgba(201,161,74,0.97)'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(0,0,36,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill();
-  ctx.fillStyle='#222'; ctx.font='700 18px Inter'; ctx.textAlign='center'; ctx.fillText('❤',0,6);
-  ctx.restore();
-}
-drawWheel(currentRotation);
-
-const spinBtn=document.getElementById('spinBtn');
-const quickBtn=document.getElementById('quickBtn');
-const res=document.getElementById('result');
-const resTitle=document.getElementById('resTitle');
-const resType=document.getElementById('resType');
-const resOk=document.getElementById('resOk');
-
-function easeOutCubic(t){return 1-Math.pow(1-t,3);}
-function spin(quick=false){
-  if(spinning) return;
-  spinning=true;
-  const targetIndex=Math.floor(Math.random()*n);
-  const full=(Math.PI*2)*(3+Math.floor(Math.random()*3));
-  const centerAngle=targetIndex*slice+slice/2;
-  const desired=-Math.PI/2-centerAngle;
-  const start=currentRotation;
-  let end=start+full+(desired-(start%(2*Math.PI)));
-  end+=(Math.random()-0.5)*slice*0.25;
-  const duration=quick?900:(2000+Math.random()*1200);
-  const t0=performance.now();
-  (function raf(now){
-    const elapsed=now-t0;
-    const p=Math.min(1,elapsed/duration);
-    const eased=easeOutCubic(p);
-    currentRotation=start+(end-start)*eased;
-    drawWheel(currentRotation);
-    const pointer=document.querySelector('.wheel-pointer');
-    if(pointer) pointer.style.transform=`rotate(${Math.sin(elapsed/110)*6}deg)`;
-    if(p<1) requestAnimationFrame(raf);
-    else {spinning=false; if(pointer) pointer.style.transform='rotate(0deg)'; revealResult();}
-  })(performance.now());
-}
-function revealResult(){
-  const norm=(currentRotation%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  const pointerAngle=(3*Math.PI/2-norm+2*Math.PI)%(2*Math.PI);
-  let idx=Math.floor(pointerAngle/slice)%n; idx=(idx+n)%n;
-  const it=items[idx];
-  resTitle.textContent=it.text;
-  resType.textContent=it.type==='Romantic'?'Romantic surprise':'Cute dare';
-  res.classList.add('show'); res.setAttribute('aria-hidden','false');
-}
-spinBtn.addEventListener('click',()=>spin(false));
-quickBtn.addEventListener('click',()=>spin(true));
-resOk.addEventListener('click',()=>{res.classList.remove('show'); res.setAttribute('aria-hidden','true');});
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
