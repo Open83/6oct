@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Saraaaa's ❤️ Gift — Envelope + Spin Wheel</title>
+<style>
+  /* ---------- Base & Background ---------- */
+  :root{
+    --accent1:#ec4899;
+    --accent2:#f59e0b;
+    --glass: rgba(255,255,255,0.12);
+    --glass-strong: rgba(255,255,255,0.95);
+    --text-dark:#222;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, system-ui, Arial;
+    background: linear-gradient(135deg,#667eea 0%,#764ba2 45%,#f093fb 100%);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    color:#fff;
+    padding:22px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:980px;
+  }
+
+  /* ---------- Card / Screen ---------- */
+  .screen{
+    display:none;
+  }
+  .screen.active{display:block}
+  .panel{
+    background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border-radius:22px;
+    padding:24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+    border:1px solid rgba(255,255,255,0.12);
+  }
+  .center{display:flex;align-items:center;justify-content:center}
+  .top-row{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+  h1{margin:0 0 6px 0;font-size:28px;letter-spacing:0.6px}
+  p.lead{margin:0;color: #f0e6ff;opacity:0.95}
+
+  /* ---------- Menu ---------- */
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:18px}
+  .menu-card{
+    cursor:pointer;
+    padding:18px;
+    border-radius:16px;
+    background: rgba(255,255,255,0.08);
+    text-align:center;
+    transition:transform .25s ease, box-shadow .25s ease;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .menu-card:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(0,0,0,0.26)}
+  .menu-icon{font-size:40px;margin-bottom:10px;display:block}
+
+  /* ---------- Back Button ---------- */
+  .back-btn{
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.18);
+    color:#fff;
+    padding:10px 12px;border-radius:10px;
+    cursor:pointer;font-weight:700;
+  }
+
+  /* ---------- Envelope (3D) ---------- */
+  .letter-screen { padding-top:12px; }
+  .envelope-wrap{display:flex;gap:20px;align-items:center;flex-direction:column;margin-top:18px}
+  .envelope-scene{width:320px;max-width:86vw;height:220px; perspective:1400px; position:relative}
+  .envelope{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition: transform .9s cubic-bezier(.2,.9,.3,1);
+    will-change:transform;
+  }
+
+  /* envelope body */
+  .env-body{
+    position:absolute;left:0;top:0;right:0;bottom:0;
+    background: linear-gradient(180deg,#fff,#ffeeff);
+    border-radius:8px;
+    border:1px solid rgba(0,0,0,0.06);
+    transform: translateZ(-1px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25), inset 0 2px 0 rgba(0,0,0,0.02);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .env-body .seal{
+    position:absolute;right:18px;bottom:18px;background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;
+    box-shadow:0 6px 18px rgba(236,72,153,0.36);
+    color:white;
+    transform: translateZ(6px);
+  }
+
+  /* flap (front) */
+  .env-flap{
+    position:absolute;left:0;top:0;right:0;height:54%;
+    transform-origin: center top;
+    border-top-left-radius:8px;border-top-right-radius:8px;
+    background: linear-gradient(180deg,#ffdff6,#ffd3ee);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    transition: transform .9s cubic-bezier(.2,.9,.3,1);
+    transform: translateZ(30px) rotateX(0deg);
+    z-index:5;
+  }
+  /* back flap shadow (for depth) */
+  .env-back{
+    position:absolute;left:0;top:0;right:0;height:54%;
+    background: linear-gradient(180deg,#ffe6f6,#ffd7ef);
+    border-top-left-radius:8px;border-top-right-radius:8px;
+    transform:translateZ(-4px) rotateX(180deg);
+    display:none;
+  }
+
+  /* showing the letter */
+  .letter-sheet{
+    position:absolute;left:10px;right:10px;top:22%;bottom:18px;
+    background:linear-gradient(180deg,#fff,#fff7fb);
+    border-radius:6px;padding:18px 16px;color:var(--text-dark);
+    transform-origin:center center;
+    transform: translateY(12px) translateZ(-20px) scale(.98);
+    opacity:0; transition: all .55s cubic-bezier(.2,.9,.3,1);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    overflow:auto;
+  }
+  .letter-sheet.show{opacity:1;transform:translateY(0) translateZ(0) scale(1)}
+  .letter-sheet h2{color:var(--text-dark);margin-bottom:8px;font-size:20px}
+  .letter-sheet p{color:#333;line-height:1.6;font-size:15px;white-space:pre-wrap}
+
+  /* envelope closed state: flap down (covering letter) */
+  .env-closed .env-flap{ transform: rotateX(0deg) translateZ(30px) }
+  /* envelope opened: flap rotates upward */
+  .env-open .env-flap{ transform: rotateX(-160deg) translateZ(30px) }
+  .env-open .letter-sheet{ opacity:1; transform:translateY(0) translateZ(0) scale(1) }
+
+  /* clickable hint */
+  .click-hint{margin-top:10px;color:rgba(255,255,255,0.9);opacity:0.95;font-weight:700}
+
+  /* ---------- Spin Wheel ---------- */
+  .wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:18px}
+  .wheel-canvas{width:340px;height:340px;max-width:86vw;border-radius:50%;background:transparent;box-shadow:0 12px 40px rgba(0,0,0,0.2)}
+  .spin-btn{
+    padding:12px 20px;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    border:none;color:#fff;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 10px 30px rgba(236,72,153,0.28)
+  }
+  .wheel-pointer{
+    width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;
+    border-bottom:22px solid #fff;position:relative;top:-12px;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+  }
+
+  /* result modal */
+  .result-modal{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);
+    min-width:260px;max-width:90vw;padding:18px;border-radius:12px;background:var(--glass-strong);
+    box-shadow:0 30px 80px rgba(0,0,0,0.45);display:none;z-index:999;
+    text-align:center;color:var(--text-dark)
+  }
+  .result-modal.show{display:block;animation:pop .28s ease-out}
+  @keyframes pop{from{transform:translate(-50%,-50%) scale(.9);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+  /* footer small */
+  .muted{opacity:0.9;font-size:13px;color:#fff;margin-top:12px}
+
+  /* Responsive */
+  @media (max-width:560px){
+    .envelope-scene{height:180px}
+    .wheel-canvas{width:300px;height:300px}
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <!-- ===== WELCOME SCREEN ===== -->
+    <div id="welcome" class="screen active">
+      <div class="panel center" style="flex-direction:column;gap:12px">
+        <div style="font-size:72px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.25))">💝</div>
+        <h1>Hello Saraaaa❤️</h1>
+        <p class="lead">A little surprise from Sayed Asif — open the gift!</p>
+        <button class="spin-btn" onclick="showScreen('menu')" style="margin-top:6px;padding:12px 26px">Open Gift 🎁</button>
+      </div>
+    </div>
+
+    <!-- ===== MENU ===== -->
+    <div id="menu" class="screen">
+      <div class="panel">
+        <div class="top-row">
+          <h1>Meri Jaan ♥️</h1>
+          <div style="flex:1"></div>
+          <button class="back-btn" onclick="showScreen('welcome')">⟵</button>
+        </div>
+        <p class="lead">Choose your adventure — I made something special</p>
+
+        <div class="menu-grid">
+          <div class="menu-card" onclick="showScreen('letter')">
+            <div class="menu-icon">💌</div>
+            <strong>Love Letter</strong>
+            <div style="opacity:.95;margin-top:8px">Tap to open the envelope</div>
+          </div>
+
+          <div class="menu-card" onclick="showScreen('moments')">
+            <div class="menu-icon">✨</div>
+            <strong>Flip the Feelings</strong>
+            <div style="opacity:.95;margin-top:8px">Discover hidden emotions</div>
+          </div>
+
+          <div class="menu-card" onclick="showScreen('playlist')">
+            <div class="menu-icon">🎵</div>
+            <strong>Our Playlist</strong>
+            <div style="opacity:.95;margin-top:8px">Songs for you</div>
+          </div>
+
+          <div class="menu-card" onclick="showScreen('game')">
+            <div class="menu-icon">🎡</div>
+            <strong>Spin the Wheel</strong>
+            <div style="opacity:.95;margin-top:8px">Get a surprise: romantic + playful</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LETTER (with envelope) ===== -->
+    <div id="letter" class="screen letter-screen">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <button class="back-btn" id="letterBack">✕</button>
+        <div>
+          <h1 style="margin-bottom:2px">Love Letter</h1>
+          <div style="font-size:13px;opacity:.95;color:#fff">Tap the envelope to open</div>
+        </div>
+      </div>
+
+      <div class="panel envelope-wrap center">
+        <div class="envelope-scene" id="envelopeScene">
+          <div class="envelope env-closed" id="envelope">
+            <div class="env-flap" id="envFlap"></div>
+            <div class="env-body">
+              <div class="seal">❤</div>
+            </div>
+
+            <div class="letter-sheet" id="letterSheet" aria-hidden="true">
+              <h2>Meri Bacchiii ♥️</h2>
+              <p id="letterText">
+Saraaaa♥️
+Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha tumne aaj call karke sorry bola lekin mujhe bhi sorry kehna hai shayad main thoda zyada rude ho gaya tha jab mujhe bas shant rehna chahiye tha mujhe tumse ladna bilkul pasand nahi hai kyunki har baar jab hum door hote hain lagta hai jaise kuch andar se adhura ho gaya ho
+
+Tum waise hi rare ho jaise duniya mein bas ek hi misal ho sirf tumhara chehra nahi tumhari aankhon ka sukoon tumhare words ka warmth sab kuch mujhe feel karata hai ki main kitna lucky hoon tumhe dekh kar sirf attraction nahi tumhara connection hota hai...
+
+I Lykeeeeeeeeeeeeee Uuuuuuuuuuuuuuuuuhhhhh Meri Jaaaaaaaaaaaaannnnnn ❤️💋
+              </p>
+              <div style="text-align:right;margin-top:10px;font-weight:800;color:#444">— Sayed Asif</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="click-hint">Tap envelope to open / tap again to close</div>
+      </div>
+    </div>
+
+    <!-- ===== MOMENTS (kept same) ===== -->
+    <div id="moments" class="screen">
+      <div class="panel">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="back-btn" onclick="showScreen('menu')">✕</button>
+          <div>
+            <h1>Special Moments</h1>
+            <div style="font-size:13px;color:#fff">Tap a card to flip</div>
+          </div>
+        </div>
+        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+          <div class="panel moment-card" onclick="this.classList.toggle('flipped')" style="cursor:pointer">
+            <div style="font-size:28px">😸</div>
+            <strong style="display:block;margin-top:6px">Tumhra naam hi sukoon hai</strong>
+            <div style="opacity:.95;margin-top:8px;color:#fff">Tap to flip</div>
+            <div class="moment-back" style="display:none;margin-top:10px;color:var(--text-dark)">
+              Jab bhi tumhra naam leta hoon na Saraaaa❤️ dil ek ajeeb si raahat mehsoos karta hai...
+            </div>
+          </div>
+
+          <div class="panel moment-card" onclick="this.classList.toggle('flipped')" style="cursor:pointer">
+            <div style="font-size:28px">😻</div>
+            <strong style="display:block;margin-top:6px">Tumhre bina sab adhoora</strong>
+            <div style="opacity:.95;margin-top:8px;color:#fff">Tap to flip</div>
+            <div class="moment-back" style="display:none;margin-top:10px;color:var(--text-dark)">
+              Tumhra na hona jaise saansein ruk jaayein...
+            </div>
+          </div>
+
+          <div class="panel moment-card" onclick="this.classList.toggle('flipped')" style="cursor:pointer">
+            <div style="font-size:28px">😽</div>
+            <strong style="display:block;margin-top:6px">Tumhra touch mein jaadu</strong>
+            <div style="opacity:.95;margin-top:8px;color:#fff">Tap to flip</div>
+            <div class="moment-back" style="display:none;margin-top:10px;color:var(--text-dark)">
+              Jab tumhra haath mere haath mein aata hai...
+            </div>
+          </div>
+
+          <div class="panel moment-card" onclick="this.classList.toggle('flipped')" style="cursor:pointer">
+            <div style="font-size:28px">🐱</div>
+            <strong style="display:block;margin-top:6px">Tu meri khoobsurat aadat</strong>
+            <div style="opacity:.95;margin-top:8px;color:#fff">Tap to flip</div>
+            <div class="moment-back" style="display:none;margin-top:10px;color:var(--text-dark)">
+              Har din tum meri aadat banti ja rahi hai...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PLAYLIST (kept same) ===== -->
+    <div id="playlist" class="screen">
+      <div class="panel">
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="back-btn" onclick="showScreen('menu')">✕</button>
+          <div>
+            <h1>Playlist For You</h1>
+            <div style="font-size:13px;color:#fff">Songs dedicated to u</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;display:grid;gap:12px">
+          <div class="panel">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:58px;height:58px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:26px">🎵</div>
+              <div>
+                <div style="font-weight:900;color:#fff">Shiddat</div>
+                <div style="opacity:.95;color:#fff;margin-top:6px">Saraaaa♥️</div>
+              </div>
+            </div>
+            <div style="margin-top:8px">
+              <iframe width="100%" height="80" style="border-radius:8px;border:none" src="https://www.youtube.com/embed/iSo9l950QLo?si=zrDGjksZnXu4rE83" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:58px;height:58px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:26px">🎵</div>
+              <div>
+                <div style="font-weight:900;color:#fff">Jeene Laga Hoon</div>
+                <div style="opacity:.95;color:#fff;margin-top:6px">Saraaaa♥️</div>
+              </div>
+            </div>
+            <div style="margin-top:8px">
+              <iframe width="100%" height="80" style="border-radius:8px;border:none" src="https://www.youtube.com/embed/vP_lgaVhb1Y?si=I7GDoj8YgudINJMw" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GAME: Spin the Wheel (replaces memory) ===== -->
+    <div id="game" class="screen">
+      <div class="panel">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="back-btn" onclick="showScreen('menu')">✕</button>
+          <div>
+            <h1>Spin the Wheel 🎡</h1>
+            <div style="font-size:13px;color:#fff">Mix of romantic messages & playful dares</div>
+          </div>
+        </div>
+
+        <div class="wheel-wrap center">
+          <div class="wheel-pointer" id="wheelPointer"></div>
+          <canvas id="wheel" class="wheel-canvas" width="680" height="680"></canvas>
+          <button class="spin-btn" id="spinBtn">SPIN 💫</button>
+          <div class="muted">Tip: Press SPIN and wait for it to stop. Be playful! 😘</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- RESULT MODAL ---------- -->
+    <div id="resultModal" class="result-modal" role="dialog" aria-modal="true">
+      <div style="font-size:40px;margin-bottom:6px">🎉</div>
+      <div id="resultText" style="font-weight:900;font-size:18px;color:var(--text-dark)">You got...</div>
+      <div id="resultDesc" style="margin-top:12px;color:var(--text-dark);font-weight:700"></div>
+      <div style="margin-top:16px">
+        <button class="spin-btn" onclick="closeResult()">OK</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* ----------------- Screen navigation ----------------- */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // For envelope: ensure start closed
+  if(id === 'letter'){
+    closeEnvelopeInstant();
+  }
+}
+
+/* ----------------- Envelope behavior ----------------- */
+const envelope = document.getElementById('envelope');
+const envFlap = document.getElementById('envFlap');
+const letterSheet = document.getElementById('letterSheet');
+let envOpen = false;
+let animatingEnvelope = false;
+
+function openEnvelope(animated=true){
+  if(animatingEnvelope) return;
+  animatingEnvelope = true;
+  envelope.classList.add('env-open');
+  envelope.classList.remove('env-closed');
+  // show letter after small delay for realism
+  setTimeout(()=> {
+    letterSheet.classList.add('show');
+    envOpen = true;
+    animatingEnvelope = false;
+  }, 320);
+}
+
+function closeEnvelope(animated=true, callback){
+  if(animatingEnvelope) return;
+  animatingEnvelope = true;
+  // hide letter first
+  letterSheet.classList.remove('show');
+  setTimeout(()=>{
+    envelope.classList.remove('env-open');
+    envelope.classList.add('env-closed');
+    envOpen = false;
+    // finish delay then callback
+    setTimeout(()=>{
+      animatingEnvelope = false;
+      if(typeof callback === 'function') callback();
+    }, 420);
+  }, 200);
+}
+
+function closeEnvelopeInstant(){
+  // reset to closed without animation (used when entering letter screen)
+  letterSheet.classList.remove('show');
+  envelope.classList.remove('env-open');
+  envelope.classList.add('env-closed');
+  envOpen = false;
+}
+
+document.getElementById('envelopeScene').addEventListener('click', ()=>{
+  if(animatingEnvelope) return;
+  if(!envOpen) openEnvelope();
+  else closeEnvelope();
+});
+
+// Back button should close envelope then return to menu
+document.getElementById('letterBack').addEventListener('click', ()=>{
+  if(envOpen){
+    closeEnvelope(true, ()=> showScreen('menu'));
+  } else {
+    showScreen('menu');
+  }
+});
+
+/* ----------------- Spin Wheel (Canvas) ----------------- */
+/*
+  Wheel features:
+  - slices determined by 'items' array
+  - spins with easing, lands on random index
+  - shows result in modal
+*/
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const DPR = window.devicePixelRatio || 1;
+const size = Math.min(window.innerWidth * 0.86, 680);
+canvas.width = size * DPR;
+canvas.height = size * DPR;
+canvas.style.width = size + 'px';
+canvas.style.height = size + 'px';
+ctx.scale(DPR, DPR);
+
+const items = [
+  {title: "A soft kiss", type:"romantic"},
+  {title: "Sing me 1 line", type:"cute"},
+  {title: "Compliment her eyes", type:"romantic"},
+  {title: "Slow dance for 30s", type:"cute"},
+  {title: "A long hug", type:"romantic"},
+  {title: "Share your cutest memory", type:"cute"},
+  {title: "Cook her favorite", type:"romantic"},
+  {title: "Whisper a secret", type:"cute"},
+  {title: "Write a love note", type:"romantic"},
+  {title: "Send a silly selfie", type:"cute"},
+  {title: "Promise one date", type:"romantic"},
+  {title: "Do 10 squats together 😂", type:"cute"}
+];
+
+const colors = [
+  "#ffe6f6","#ffdff0","#ffeedd","#fff1f6","#ffedfa","#ffe6f0"
+];
+
+let startAngle = 0;
+const center = size / 2;
+const radius = center - 10;
+const sliceAngle = (2 * Math.PI) / items.length;
+
+// draw
+function drawWheel(){
+  ctx.clearRect(0,0,size,size);
+  // outer circle
+  for(let i=0;i<items.length;i++){
+    const angle = startAngle + i * sliceAngle;
+    ctx.beginPath();
+    ctx.moveTo(center,center);
+    ctx.arc(center,center,radius, angle, angle + sliceAngle);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // text
+    ctx.save();
+    ctx.translate(center,center);
+    ctx.rotate(angle + sliceAngle/2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#222";
+    ctx.font = "bold 14px 'Segoe UI', Roboto, Arial";
+    ctx.fillText(items[i].title, radius - 10, 6);
+    ctx.restore();
+  }
+
+  // inner circle to make it look nice
+  ctx.beginPath();
+  ctx.arc(center,center,36,0,2*Math.PI);
+  ctx.fillStyle = "white";
+  ctx.fill();
+
+  // center icon
+  ctx.fillStyle = "#222";
+  ctx.font = "700 20px 'Segoe UI', Roboto";
+  ctx.textAlign = "center";
+  ctx.fillText("❤", center, center + 8);
+}
+drawWheel();
+
+// spin control
+let spinning = false;
+let spinStart = 0;
+let spinDuration = 0;
+let start = 0;
+let currentRotation = 0;
+let targetRotation = 0;
+
+function easeOutCubic(t){ return (--t)*t*t + 1; }
+
+function animateSpin(timestamp){
+  if(!spinStart) spinStart = timestamp;
+  const elapsed = timestamp - spinStart;
+  const t = Math.min(1, elapsed / spinDuration);
+  const eased = easeOutCubic(t);
+  currentRotation = start + (targetRotation - start) * eased;
+  startAngle = currentRotation;
+  drawWheel();
+  if(t < 1){
+    requestAnimationFrame(animateSpin);
+  } else {
+    spinning = false;
+    spinStart = 0;
+    // determine landed index
+    const normalized = (currentRotation % (2*Math.PI) + (2*Math.PI)) % (2*Math.PI);
+    // pointer is at the top (PI/2 negative). We'll compute index.
+    const pointerAngle = (3*Math.PI/2 - normalized + 2*Math.PI) % (2*Math.PI);
+    let index = Math.floor(pointerAngle / sliceAngle) % items.length;
+    showResult(index);
+  }
+}
+
+document.getElementById('spinBtn').addEventListener('click', ()=>{
+  if(spinning) return;
+  spinning = true;
+  // random full spins + choose target index randomly
+  const fullSpins = 3 + Math.floor(Math.random()*3); // 3..5 full turns
+  const targetIndex = Math.floor(Math.random() * items.length);
+  // compute rotation so that target's middle lands under pointer (top)
+  // angle for slice center:
+  const sliceCenterAngle = (targetIndex * sliceAngle) + sliceAngle/2;
+  // We want sliceCenterAngle to end at pointerAngle (3PI/2)
+  const finalRotation = (3*Math.PI/2) - sliceCenterAngle;
+  start = startAngle;
+  targetRotation = start + fullSpins * 2 * Math.PI + finalRotation;
+  spinDuration = 2200 + Math.random()*1200; // 2.2s - 3.4s
+  spinStart = 0;
+  requestAnimationFrame(animateSpin);
+});
+
+// show result
+const resultModal = document.getElementById('resultModal');
+const resultText = document.getElementById('resultText');
+const resultDesc = document.getElementById('resultDesc');
+function showResult(idx){
+  const it = items[idx];
+  resultText.textContent = it.title;
+  // friendly description line (mix playful/romantic)
+  let desc = "";
+  if(it.type === "romantic"){
+    desc = "A sweet romantic moment — make it special ❤️";
+  } else {
+    desc = "Cute & playful — go for it and have fun 😄";
+  }
+  resultDesc.textContent = desc;
+  resultModal.classList.add('show');
+}
+
+// close result
+function closeResult(){
+  resultModal.classList.remove('show');
+}
+
+/* ----------------- Extra polish: clicking outside modal closes it ----------------- */
+window.addEventListener('click', (e) => {
+  if(e.target === resultModal) closeResult();
+});
+
+/* ----------------- small: make moment cards flip content (simple) ----------------- */
+document.querySelectorAll('.moment-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const back = card.querySelector('.moment-back');
+    if(back){
+      back.style.display = back.style.display === 'block' ? 'none' : 'block';
+    }
+  });
+});
+
+/* ----------------- ensure canvas redraws on resize ----------------- */
+window.addEventListener('resize', ()=>{
+  // resize conservative
+  const newSize = Math.min(window.innerWidth * 0.86, 680);
+  canvas.width = newSize * DPR;
+  canvas.height = newSize * DPR;
+  canvas.style.width = newSize + 'px';
+  canvas.style.height = newSize + 'px';
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.scale(DPR, DPR);
+  drawWheel();
+});
+
+// initial screen (already welcome)
+</script>
+</body>
+</html>
