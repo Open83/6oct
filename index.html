@@ -3,363 +3,213 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Gift — Envelope + Classic Wheel</title>
+<title>Gift — Envelope + Wheel</title>
 <style>
-  :root{
-    --bg:#f4f6f9;
-    --card:#ffffff;
-    --accent:#c92a2a;       /* red seal */
-    --gold:#c9a14a;
-    --muted:#6b6f76;
-    --paper:#fffaf2;
-    --maxWidth:980px;
-    --ease: cubic-bezier(.2,.9,.3,1);
-    --env-width: min(92vw,420px);
-  }
+:root {
+  --bg: #f4f6f9;
+  --card: #fff;
+  --accent: #c92a2a;
+  --paper: #fffaf2;
+  --muted: #6b6f76;
+  --maxWidth: 980px;
+  --ease: cubic-bezier(.2,.9,.3,1);
+  --env-width: min(90vw,380px);
+}
 
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;background:var(--bg);font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;color:#111}
-  .wrap{max-width:var(--maxWidth);margin:18px auto;padding:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+html, body{height:100%;background:var(--bg);font-family:Inter, Arial,sans-serif;color:#111;}
+.wrap{max-width:var(--maxWidth);margin:18px auto;padding:12px}
 
-  .panel{background:var(--card);border-radius:14px;padding:12px;box-shadow:0 12px 40px rgba(16,24,40,0.06);border:1px solid rgba(0,0,0,0.04)}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  h1{font-size:18px;margin:0}
-  .small{font-size:13px;color:var(--muted)}
+/* Envelope Area */
+.env-area{display:flex;justify-content:center;align-items:center;padding:18px 0}
+.env-scene{width:var(--env-width);height:calc(var(--env-width)*0.62);position:relative;perspective:2200px;}
+.envelope-wrap{position:relative;width:100%;height:100%;user-select:none;cursor:pointer;}
+.env-pocket{
+  position:absolute;top:12%;left:0;right:0;bottom:6%;
+  border-radius:10px;background:linear-gradient(180deg,#fffefc,#fff9f3);
+  border:1px solid rgba(0,0,0,0.04);box-shadow:inset 0 2px 0 rgba(0,0,0,0.02),0 12px 28px rgba(0,0,0,0.06);
+  overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding-top:18%;z-index:2;
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:56%;
+  border-top-left-radius:10px;border-top-right-radius:10px;
+  background:linear-gradient(180deg,#fff6f5,#fff0f0);box-shadow:0 14px 40px rgba(0,0,0,0.06);
+  transform-origin:center top;transform:rotateX(0deg) translateZ(36px);
+  transition: transform .7s var(--ease);
+  z-index:8;
+  backface-visibility:hidden;
+}
+.env-flap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(180deg,rgba(255,255,255,0.25),rgba(0,0,0,0.02));}
+.env-seal{
+  position:absolute;top:44%;left:50%;transform:translateX(-50%);
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(180deg,var(--accent),#8a1a1a);
+  display:flex;align-items:center;justify-content:center;color:white;font-weight:900;
+  z-index:9;box-shadow:0 8px 24px rgba(201,42,42,0.22);
+}
+/* Letter */
+.letter{
+  position:absolute;left:10%;right:10%;top:18%;height:60%;
+  background:linear-gradient(180deg,var(--paper),#fff9f0);border-radius:6px;padding:14px;
+  box-shadow:0 18px 50px rgba(12,20,30,0.08);
+  transform-origin:center bottom;transform:translateY(22px) scale(.98);opacity:0;
+  transition: transform .6s var(--ease), opacity .45s var(--ease), box-shadow .3s;
+  z-index:6;overflow:auto;color:#1b1b1b;-webkit-overflow-scrolling:touch;
+}
+.letter h2{font-size:16px;margin-bottom:6px}
+.letter p{font-size:14px;line-height:1.6;white-space:pre-wrap;color:#222;margin:0;}
+.envelope-wrap.open .env-flap{transform:rotateX(-160deg) translateZ(36px);}
+.envelope-wrap.open .letter{transform:translateY(-120px) scale(1);opacity:1;z-index:9;box-shadow:0 36px 90px rgba(12,18,28,0.12);}
+.letter.fold{transform:translateY(20px) scaleY(.8) translateZ(0);opacity:0;transition: transform .48s cubic-bezier(.35,.8,.2,1), opacity .28s linear;}
 
-  /* Menu grid */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
-  .card{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;cursor:pointer;background:linear-gradient(180deg,rgba(0,0,0,0.01),rgba(0,0,0,0.01));transition:transform .22s var(--ease),box-shadow .22s}
-  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(16,24,40,0.06)}
-  .card .ico{font-size:28px}
+/* Buttons */
+.controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.btn{background:#1f6feb;color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer;box-shadow:0 10px 28px rgba(31,111,235,0.14)}
+.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:#111}
 
-  /* Screen */
-  .screen{display:none}
-  .screen.active{display:block}
+/* Wheel */
+.wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px}
+canvas.wheel{width:min(92vw,420px);height:auto;border-radius:50%;}
+.wheel-pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:30px solid #fff;filter:drop-shadow(0 8px 20px rgba(0,0,0,0.12));margin-bottom:-12px}
+.spin-row{display:flex;gap:10px;align-items:center}
+.muted{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
 
-  /* Envelope scene (mobile-first) */
-  .env-area{display:flex;justify-content:center;align-items:center;padding:18px 0}
-  .env-scene{width:var(--env-width);height:calc(var(--env-width) * 0.62);position:relative;perspective:1400px;-webkit-perspective:1400px}
-  .envelope-wrap{position:relative;width:100%;height:100%;user-select:none}
-
-  /* pocket */
-  .env-pocket{
-    position:absolute;left:0;right:0;top:12%;bottom:6%;
-    border-radius:10px;background:linear-gradient(180deg,#fffefc,#fff9f3);
-    border:1px solid rgba(0,0,0,0.04);box-shadow:inset 0 2px 0 rgba(0,0,0,0.02), 0 12px 28px rgba(0,0,0,0.06);
-    overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding-top:18%;
-    z-index:2;
-  }
-
-  /* top flap */
-  .env-flap{
-    position:absolute;left:0;right:0;top:0;height:56%;
-    border-top-left-radius:10px;border-top-right-radius:10px;
-    background:linear-gradient(180deg,#fff6f5,#fff0f0);box-shadow:0 14px 40px rgba(0,0,0,0.06);
-    transform-origin:center top;transform:rotateX(0deg) translateZ(36px);
-    transition: transform .86s var(--ease);
-    z-index:8;
-  }
-  /* small fold line visual */
-  .env-flap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(180deg,rgba(255,255,255,0.25),rgba(0,0,0,0.02));}
-
-  /* seal */
-  .env-seal{
-    position:absolute;left:50%;transform:translateX(-50%);top:44%;
-    width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,var(--accent),#8a1a1a);
-    display:flex;align-items:center;justify-content:center;color:white;font-weight:900;z-index:9;
-    box-shadow:0 8px 24px rgba(201,42,42,0.22);
-  }
-
-  /* letter sheet */
-  .letter{
-    position:absolute;left:10%;right:10%;top:18%;height:60%;
-    background:linear-gradient(180deg,var(--paper),#fff9f0);border-radius:6px;padding:14px;box-shadow:0 18px 50px rgba(12,20,30,0.08);
-    transform-origin:center bottom;transform:translateY(22px) scale(.98);opacity:0;transition: transform .6s var(--ease), opacity .45s var(--ease), box-shadow .3s;
-    z-index:6;
-    overflow:auto;color:#1b1b1b;
-    -webkit-overflow-scrolling:touch;
-  }
-  .letter h2{font-size:16px;margin:0 0 6px 0}
-  .letter p{font-size:14px;line-height:1.6;white-space:pre-wrap;margin:0;color:#222}
-
-  /* OPEN state */
-  .envelope-wrap.open .env-flap{ transform: rotateX(-168deg) translateZ(36px); }
-  .envelope-wrap.open .letter{ transform: translateY(-10%) scale(1); opacity:1; box-shadow:0 36px 90px rgba(12,18,28,0.12) }
-
-  /* close fold animation (compress + slide down) */
-  .letter.fold{
-    transition: transform .48s cubic-bezier(.35,.8,.2,1), opacity .28s linear;
-    transform: translateY(20px) scaleY(.8) translateZ(0);
-    opacity:0;
-  }
-
-  /* controls */
-  .controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
-  .btn{background:#1f6feb;color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer;box-shadow:0 10px 28px rgba(31,111,235,0.14)}
-  .btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:#111}
-
-  /* Moments flip (elegant) */
-  .moments-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  @media (max-width:640px){ .moments-grid{grid-template-columns:1fr} }
-  .flip-card{height:150px;perspective:1000px}
-  .flip-inner{position:relative;width:100%;height:100%;transition:transform .44s var(--ease);transform-style:preserve-3d;border-radius:10px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,0.06)}
-  .flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:12px}
-  .flip-front{background:linear-gradient(180deg,#fff,#fbf9f7);font-weight:800}
-  .flip-back{background:#fff;transform:rotateY(180deg);color:#111;font-weight:700}
-  .flip-inner.flipped{transform:rotateY(180deg)}
-
-  /* Playlist */
-  .song{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfbfb);border:1px solid rgba(0,0,0,0.03)}
-
-  /* Wheel */
-  .wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px}
-  canvas.wheel{width:min(92vw,420px);height:auto;border-radius:50%}
-  .wheel-pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:30px solid #fff;filter:drop-shadow(0 8px 20px rgba(0,0,0,0.12));margin-bottom:-12px}
-
-  .spin-row{display:flex;gap:10px;align-items:center}
-  .muted{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
-
-  /* result modal */
-  .result{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);min-width:260px;background:#fff;border-radius:10px;padding:14px;box-shadow:0 30px 90px rgba(0,0,0,0.18);display:none;z-index:200}
-  .result.show{display:block}
-  .result h3{margin:0 0 6px 0}
-  .result p{margin:0 0 8px 0;color:#444}
-
-  footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
-
-  /* accessibility reduce motion */
-  @media (prefers-reduced-motion: reduce){
-    .env-flap, .letter, .flip-inner, canvas { transition:none !important; animation:none !important; }
-  }
+/* Result Modal */
+.result{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);min-width:260px;background:#fff;border-radius:10px;padding:14px;box-shadow:0 30px 90px rgba(0,0,0,0.18);display:none;z-index:200}
+.result.show{display:block}
+.result h3{margin:0 0 6px 0}
+.result p{margin:0 0 8px 0;color:#444}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- MENU -->
-    <div id="menuScreen" class="screen active">
-      <div class="panel">
-        <header>
-          <div>
-            <h1>For Saraaaa ❤️</h1>
-            <div class="small">A classic little gift — open it</div>
-          </div>
-          <div style="flex:1"></div>
-        </header>
-
-        <div class="grid" style="margin-top:12px">
-          <div class="card" onclick="show('letterScreen')"><div class="ico">💌</div><div><strong>Love Letter</strong><div class="small">Classic envelope</div></div></div>
-          <div class="card" onclick="show('momentsScreen')"><div class="ico">✨</div><div><strong>Moments</strong><div class="small">Flip & read</div></div></div>
-          <div class="card" onclick="show('playlistScreen')"><div class="ico">🎵</div><div><strong>Playlist</strong><div class="small">Songs for you</div></div></div>
-          <div class="card" onclick="show('gameScreen')"><div class="ico">🎡</div><div><strong>Spin the Wheel</strong><div class="small">Elegant & classic</div></div></div>
-        </div>
+<div class="wrap">
+  <!-- LETTER SCREEN -->
+  <div id="letterScreen" class="screen active">
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
+        <div style="flex:1"><h1>Love Letter</h1><div class="small">Tap the envelope or buttons</div></div>
       </div>
-    </div>
 
-    <!-- LETTER -->
-    <div id="letterScreen" class="screen">
-      <div class="panel">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-          <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
-          <div style="flex:1"><h1>Love Letter</h1><div class="small">Tap the envelope (or use buttons)</div></div>
-        </div>
-
-        <div class="env-area">
-          <div class="env-scene" id="envScene" tabindex="0" role="button" aria-pressed="false">
-            <div class="envelope-wrap" id="envelopeWrap" aria-live="polite">
-              <div class="env-pocket" id="envPocket"></div>
-              <div class="env-flap" id="envFlap" aria-hidden="true"></div>
-              <div class="env-seal" id="envSeal">❤</div>
-
-              <article class="letter" id="letter" aria-hidden="true">
-                <h2>Meri Bacchiii ♥️</h2>
-                <p id="letterText">
+      <div class="env-area">
+        <div class="env-scene" id="envScene" tabindex="0">
+          <div class="envelope-wrap" id="envelopeWrap">
+            <div class="env-pocket"></div>
+            <div class="env-flap"></div>
+            <div class="env-seal">❤</div>
+            <article class="letter" id="letter">
+              <h2>Meri Bacchiii ♥️</h2>
+              <p>
 Saraaaa♥️
 Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha. Tumne aaj call karke sorry bola lekin mujhe bhi sorry kehna hai; shayad main thoda zyada rude ho gaya tha jab mujhe bas shant rehna chahiye tha. Mujhe tumse ladna pasand nahi hai kyunki har baar jab hum door hote hain lagta hai jaise kuch adhura ho gaya ho.
 
 Tum waise hi rare ho — tumhari aankhon ka sukoon, tumhare alfaaz ka warmth. Main seriously blessed hoon. I Lykeeeeee Uuuuu Meri Jaannnn ❤️
-                </p>
-                <div style="text-align:right;margin-top:8px;font-weight:700;color:#444">— Sayed Asif</div>
-              </article>
-            </div>
-          </div>
-        </div>
-
-        <div class="controls">
-          <button id="openBtn" class="btn">Open</button>
-          <button id="closeBtn" class="btn ghost">Close</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MOMENTS -->
-    <div id="momentsScreen" class="screen">
-      <div class="panel">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-          <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
-          <div><h1>Special Moments</h1><div class="small">Tap a card to flip</div></div>
-        </div>
-
-        <div class="moments-grid" style="margin-top:12px">
-          <div class="flip-card"><div class="flip-inner" tabindex="0"><div class="flip-front">😸<div style="font-weight:800;margin-top:8px">Tumhra naam hi sukoon</div></div><div class="flip-back">Jab bhi tumhara naam leta hoon na Saraaaa, dil ko sukoon milta hai...</div></div></div>
-          <div class="flip-card"><div class="flip-inner" tabindex="0"><div class="flip-front">😻<div style="font-weight:800;margin-top:8px">Tumhre bina adhoora</div></div><div class="flip-back">Tumhare bina sab adhoora lagta hai...</div></div></div>
-          <div class="flip-card"><div class="flip-inner" tabindex="0"><div class="flip-front">😽<div style="font-weight:800;margin-top:8px">Touch mein jaadu</div></div><div class="flip-back">Jab tumhara haath mera haath pakadta hai, sab theek lagta hai...</div></div></div>
-          <div class="flip-card"><div class="flip-inner" tabindex="0"><div class="flip-front">🐱<div style="font-weight:800;margin-top:8px">Tu meri aadat</div></div><div class="flip-back">Har din tum meri aadat banti ja rahi ho — chhodna namumkin.</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PLAYLIST -->
-    <div id="playlistScreen" class="screen">
-      <div class="panel">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><button class="btn ghost" onclick="show('menuScreen')">← Back</button><div><h1>Playlist</h1><div class="small">Songs for you</div></div></div>
-
-        <div style="margin-top:10px">
-          <div class="song"><div style="width:56px;height:56px;border-radius:8px;background:linear-gradient(90deg,#f8d7d7,#ffdede);display:grid;place-items:center">🎧</div><div><div style="font-weight:900">Shiddat</div><div class="small">Saraaaa ♥️</div></div></div>
-
-          <div style="margin-top:12px">
-            <iframe width="100%" height="88" style="border-radius:8px;border:none" src="https://www.youtube.com/embed/iSo9l950QLo?si=zrDGjksZnXu4rE83" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </p>
+              <div style="text-align:right;margin-top:8px;font-weight:700;color:#444">— Sayed Asif</div>
+            </article>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- GAME -->
-    <div id="gameScreen" class="screen">
-      <div class="panel">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><button class="btn ghost" onclick="show('menuScreen')">← Back</button><div><h1>Spin the Wheel</h1><div class="small">Elegant gold rim</div></div></div>
-
-        <div class="wheel-wrap">
-          <div class="wheel-pointer" aria-hidden="true"></div>
-          <canvas id="wheelCanvas" class="wheel" width="680" height="680" aria-label="Spin the wheel"></canvas>
-          <div class="spin-row" style="margin-top:8px">
-            <button id="spinBtn" class="btn">SPIN</button>
-            <button id="quickBtn" class="btn ghost">QUICK</button>
-          </div>
-          <div class="muted">Tap SPIN and wait — the wheel slows naturally.</div>
-        </div>
+      <div class="controls">
+        <button id="openBtn" class="btn">Open</button>
+        <button id="closeBtn" class="btn ghost">Close</button>
       </div>
     </div>
-
-    <div id="result" class="result" role="dialog" aria-modal="true" aria-hidden="true">
-      <h3 id="resTitle"></h3>
-      <p id="resType"></p>
-      <div style="text-align:center"><button id="resOk" class="btn">OK</button></div>
-    </div>
-
-    <footer><div class="small" style="text-align:center;margin-top:12px">Made with ❤️</div></footer>
   </div>
 
+  <!-- WHEEL SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <button class="btn ghost" onclick="show('menuScreen')">← Back</button>
+        <div><h1>Spin the Wheel</h1><div class="small">Elegant gold rim</div></div>
+      </div>
+
+      <div class="wheel-wrap">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheelCanvas" class="wheel" width="680" height="680"></canvas>
+        <div class="spin-row" style="margin-top:8px">
+          <button id="spinBtn" class="btn">SPIN</button>
+          <button id="quickBtn" class="btn ghost">QUICK</button>
+        </div>
+        <div class="muted">Tap SPIN and wait — the wheel slows naturally.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="result" class="result">
+    <h3 id="resTitle"></h3>
+    <p id="resType"></p>
+    <div style="text-align:center"><button id="resOk" class="btn">OK</button></div>
+  </div>
+</div>
+
 <script>
-/* ----------------- Navigation ----------------- */
+/* ---------------- NAV ----------------- */
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  // reset envelope if showing letter screen
-  if(id === 'letterScreen') resetEnvelopeImmediate();
 }
-document.querySelectorAll('.card').forEach(c=>c.addEventListener('keydown', e=>{ if(e.key==='Enter') c.click(); }));
 
-/* ----------------- Envelope: realistic open/slide/fold ----------------- */
-/*
-   Behavior:
-   - Initially closed.
-   - Clicking envelope area or Open button:
-       * flap rotates up (envOpen class)
-       * after flap motion (delay), letter transitions up (opacity+translate)
-   - Clicking Close:
-       * letter gets 'fold' class (compress + fade), then after timeout flap closes
-*/
+/* --------------- Envelope --------------- */
 const envelopeWrap = document.getElementById('envelopeWrap');
 const envScene = document.getElementById('envScene');
 const openBtn = document.getElementById('openBtn');
 const closeBtn = document.getElementById('closeBtn');
 const letter = document.getElementById('letter');
-const resultModal = document.getElementById('result');
 
-let envOpen = false;
-let envBusy = false;
+let envOpen=false, envBusy=false;
 
 function openEnvelope(){
-  if(envBusy || envOpen) return;
-  envBusy = true;
+  if(envBusy||envOpen) return;
+  envBusy=true;
   envelopeWrap.classList.add('open');
-  envScene.setAttribute('aria-pressed','true');
-  // reveal letter slightly after flap begins
-  setTimeout(()=> {
-    letter.setAttribute('aria-hidden','false');
+  setTimeout(()=>{
     letter.classList.remove('fold');
-    envOpen = true;
-    envBusy = false;
-  }, 260);
+    envOpen=true;
+    envBusy=false;
+  },300);
 }
 
 function closeEnvelope(){
-  if(envBusy || !envOpen){
+  if(envBusy||!envOpen){
     envelopeWrap.classList.remove('open');
-    letter.setAttribute('aria-hidden','true');
-    envOpen = false;
+    letter.classList.add('fold');
+    envOpen=false;
     return;
   }
-  envBusy = true;
-  // fold animation: compress & fade
+  envBusy=true;
   letter.classList.add('fold');
-  setTimeout(()=> {
-    letter.setAttribute('aria-hidden','true');
+  setTimeout(()=>{
     envelopeWrap.classList.remove('open');
-    // clear state
-    setTimeout(()=> {
-      letter.classList.remove('fold');
-      envOpen = false;
-      envBusy = false;
-    }, 240);
-  }, 420);
+    setTimeout(()=>{letter.classList.remove('fold');envOpen=false;envBusy=false;},250);
+  },420);
 }
 
-function resetEnvelopeImmediate(){
-  envelopeWrap.classList.remove('open');
-  letter.setAttribute('aria-hidden','true');
-  letter.classList.remove('fold');
-  envOpen = false;
-  envBusy = false;
-}
-
-/* clicks */
-envScene.addEventListener('click', (e)=>{
-  // ignore clicks on buttons if any
-  if(e.target.closest('button')) return;
-  if(!envOpen) openEnvelope(); else closeEnvelope();
-});
+envScene.addEventListener('click', ()=> envOpen?closeEnvelope():openEnvelope());
 openBtn.addEventListener('click', openEnvelope);
 closeBtn.addEventListener('click', closeEnvelope);
-/* keyboard support */
-envScene.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); envScene.click(); } });
 
-/* ----------------- Moments flip ----------------- */
-document.querySelectorAll('.flip-inner').forEach(inner=>{
-  inner.addEventListener('click', ()=> inner.classList.toggle('flipped'));
-  inner.addEventListener('keydown', (e)=> { if(e.key==='Enter') inner.classList.toggle('flipped'); });
-});
-
-/* ----------------- Wheel (classic, gold rim) ----------------- */
+/* ----------------- Wheel --------------- */
 const canvas = document.getElementById('wheelCanvas');
-const ctx = canvas.getContext('2d', { alpha: true });
-let size = Math.min(window.innerWidth * 0.92, 680);
+const ctx = canvas.getContext('2d');
+let size = Math.min(window.innerWidth*0.92,680);
 const DPR = window.devicePixelRatio || 1;
 
 function resize(){
-  size = Math.min(window.innerWidth * 0.92, 680);
-  canvas.style.width = size + 'px';
-  canvas.style.height = size + 'px';
-  canvas.width = Math.round(size * DPR);
-  canvas.height = Math.round(size * DPR);
+  size = Math.min(window.innerWidth*0.92,680);
+  canvas.style.width = size+'px';
+  canvas.style.height = size+'px';
+  canvas.width = Math.round(size*DPR);
+  canvas.height = Math.round(size*DPR);
   ctx.setTransform(DPR,0,0,DPR,0,0);
   drawWheel(currentRotation);
 }
 window.addEventListener('resize', resize);
 resize();
 
-const items = [
+const items=[
   {text:"Tender kiss", type:"Romantic"},
   {text:"Sing 1 line", type:"Cute"},
   {text:"Compliment her", type:"Romantic"},
@@ -373,111 +223,83 @@ const items = [
   {text:"Promise a date", type:"Romantic"},
   {text:"Do 10 squats", type:"Cute"}
 ];
-const n = items.length;
-const slice = (2*Math.PI)/n;
-const palette = ['#fff6ee','#fff8f3','#fffaf7','#fff6f1','#fff7f4','#fffaf5'];
+const n=items.length;
+const slice=(2*Math.PI)/n;
+const palette=['#fff6ee','#fff0f0','#fffaf7','#fff6f1','#fff7f4','#fffaf5'];
 
-let currentRotation = 0;
-let spinning = false;
+let currentRotation=0, spinning=false;
 
 function drawWheel(rot){
-  const w = size, cx = w/2, cy = w/2, rOut = w/2 - 6;
+  const w=size, cx=w/2, cy=w/2, rOut=w/2-6;
   ctx.clearRect(0,0,w,w);
-  ctx.save();
-  ctx.translate(cx,cy);
-  ctx.rotate(rot);
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot);
   for(let i=0;i<n;i++){
-    const a = i * slice;
+    const a=i*slice;
     ctx.beginPath();
     ctx.moveTo(0,0);
     ctx.arc(0,0,rOut,a,a+slice);
     ctx.closePath();
-    ctx.fillStyle = palette[i % palette.length];
+    ctx.fillStyle=palette[i%palette.length];
     ctx.fill();
-    ctx.strokeStyle = '#eee';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    // text
+    ctx.strokeStyle='#eee'; ctx.lineWidth=1; ctx.stroke();
     ctx.save();
-    ctx.rotate(a + slice/2);
-    ctx.fillStyle = '#222';
-    ctx.font = "700 13px Inter, Arial";
-    ctx.textAlign = "right";
-    const txt = items[i].text;
-    ctx.fillText(txt, rOut - 12, 6);
+    ctx.rotate(a+slice/2);
+    ctx.fillStyle='#222'; ctx.font='700 16px Inter';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(items[i].text,rOut*0.65,0);
     ctx.restore();
   }
-  // gold rim
-  ctx.beginPath(); ctx.arc(0,0,rOut + 4,0,2*Math.PI); ctx.lineWidth = 10; ctx.strokeStyle = 'rgba(201,161,74,0.97)'; ctx.stroke();
-  // center
-  ctx.beginPath(); ctx.arc(0,0,36,0,2*Math.PI); ctx.fillStyle = '#fff'; ctx.fill();
-  ctx.fillStyle = '#222'; ctx.font = "700 18px Inter, Arial"; ctx.textAlign='center'; ctx.fillText('❤',0,6);
+  ctx.beginPath(); ctx.arc(0,0,rOut+4,0,2*Math.PI); ctx.lineWidth=10; ctx.strokeStyle='rgba(201,161,74,0.97)'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(0,0,36,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.fillStyle='#222'; ctx.font='700 18px Inter'; ctx.textAlign='center'; ctx.fillText('❤',0,6);
   ctx.restore();
 }
-
 drawWheel(currentRotation);
 
-/* spin controls */
-const spinBtn = document.getElementById('spinBtn');
-const quickBtn = document.getElementById('quickBtn');
-const res = document.getElementById('result');
-const resTitle = document.getElementById('resTitle');
-const resType = document.getElementById('resType');
-const resOk = document.getElementById('resOk');
+const spinBtn=document.getElementById('spinBtn');
+const quickBtn=document.getElementById('quickBtn');
+const res=document.getElementById('result');
+const resTitle=document.getElementById('resTitle');
+const resType=document.getElementById('resType');
+const resOk=document.getElementById('resOk');
 
-function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function spin(quick=false){
   if(spinning) return;
-  spinning = true;
-  const targetIndex = Math.floor(Math.random() * n);
-  const full = (Math.PI*2) * (3 + Math.floor(Math.random()*3));
-  const centerAngle = targetIndex * slice + slice/2;
-  const desired = -Math.PI/2 - centerAngle;
-  const start = currentRotation;
-  let end = start + full + (desired - (start % (2*Math.PI)));
-  end += (Math.random() - 0.5) * slice * 0.25;
-  const duration = quick ? 900 : (2000 + Math.random()*1200);
-  const t0 = performance.now();
+  spinning=true;
+  const targetIndex=Math.floor(Math.random()*n);
+  const full=(Math.PI*2)*(3+Math.floor(Math.random()*3));
+  const centerAngle=targetIndex*slice+slice/2;
+  const desired=-Math.PI/2-centerAngle;
+  const start=currentRotation;
+  let end=start+full+(desired-(start%(2*Math.PI)));
+  end+=(Math.random()-0.5)*slice*0.25;
+  const duration=quick?900:(2000+Math.random()*1200);
+  const t0=performance.now();
   (function raf(now){
-    const elapsed = now - t0;
-    const p = Math.min(1, elapsed / duration);
-    const eased = easeOutCubic(p);
-    currentRotation = start + (end - start) * eased;
+    const elapsed=now-t0;
+    const p=Math.min(1,elapsed/duration);
+    const eased=easeOutCubic(p);
+    currentRotation=start+(end-start)*eased;
     drawWheel(currentRotation);
-    // pointer wobble
-    const pointer = document.querySelector('.wheel-pointer');
-    if(pointer) pointer.style.transform = `rotate(${Math.sin(elapsed/110) * 6}deg)`;
-    if(p < 1) requestAnimationFrame(raf);
-    else {
-      spinning = false;
-      if(pointer) pointer.style.transform = 'rotate(0deg)';
-      revealResult();
-    }
+    const pointer=document.querySelector('.wheel-pointer');
+    if(pointer) pointer.style.transform=`rotate(${Math.sin(elapsed/110)*6}deg)`;
+    if(p<1) requestAnimationFrame(raf);
+    else {spinning=false; if(pointer) pointer.style.transform='rotate(0deg)'; revealResult();}
   })(performance.now());
 }
-
 function revealResult(){
-  const norm = (currentRotation % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
-  const pointerAngle = (3*Math.PI/2 - norm + 2*Math.PI) % (2*Math.PI);
-  let idx = Math.floor(pointerAngle / slice) % n;
-  idx = (idx + n) % n;
-  const it = items[idx];
-  resTitle.textContent = it.text;
-  resType.textContent = it.type === 'Romantic' ? 'Romantic surprise' : 'Cute dare';
+  const norm=(currentRotation%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const pointerAngle=(3*Math.PI/2-norm+2*Math.PI)%(2*Math.PI);
+  let idx=Math.floor(pointerAngle/slice)%n; idx=(idx+n)%n;
+  const it=items[idx];
+  resTitle.textContent=it.text;
+  resType.textContent=it.type==='Romantic'?'Romantic surprise':'Cute dare';
   res.classList.add('show'); res.setAttribute('aria-hidden','false');
 }
-
-spinBtn.addEventListener('click', ()=> spin(false));
-quickBtn.addEventListener('click', ()=> spin(true));
-resOk.addEventListener('click', ()=> { res.classList.remove('show'); res.setAttribute('aria-hidden','true'); });
-
-/* prevent double-tap issues */
-let lastTap = 0;
-document.body.addEventListener('touchend', (e)=>{ const now = Date.now(); if(now - lastTap < 200) e.preventDefault(); lastTap = now; }, { passive:true });
-
-/* initial accessibility */
-document.getElementById('envScene').addEventListener('keydown', e=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); envScene.click(); } });
+spinBtn.addEventListener('click',()=>spin(false));
+quickBtn.addEventListener('click',()=>spin(true));
+resOk.addEventListener('click',()=>{res.classList.remove('show'); res.setAttribute('aria-hidden','true');});
 </script>
 </body>
 </html>
