@@ -3,41 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💖 My Special App 💖</title>
+    <title>Saraaaa's❤️ Gift 💝</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="floating-hearts" id="floatingHearts"></div>
 
-<!-- FRONT PAGE -->
-<div id="menu" class="screen active">
-    <h1 class="menu-title">💖 My Special App 💖</h1>
-    <p class="menu-subtitle">For my one & only Saraaaa♥️</p>
-    <button onclick="showScreen('letter')">Open Letter ✉️</button>
-    <button onclick="showScreen('game')">Play Memory Game 🎮</button>
-    <div class="hearts-container" id="heartsContainer"></div>
-</div>
-
-<!-- LETTER SCREEN -->
-<div id="letter" class="screen">
-    <div class="envelope" onclick="openLetter()">
-        <div class="envelope-top"></div>
-        <div class="envelope-body"></div>
+    <!-- Welcome Screen -->
+    <div id="welcome" class="screen active">
+        <div class="welcome-content">
+            <div class="kitty-welcome">😺</div>
+            <div class="welcome-emoji">💝</div>
+            <h1 class="welcome-title">Hello Saraaaa❤️</h1>
+            <p class="welcome-subtitle">Something Special for You ♥</p>
+            <button class="btn-primary" onclick="showScreen('menu')">Open Gift 🎁</button>
+        </div>
     </div>
-    <div class="letter-content" id="letterContent">
-        <p>💌 My dearest Saraaaa♥️,</p>
-        <p>You are my world, my love, my everything...</p>
-        <button onclick="closeLetter()">Close Letter</button>
+
+    <!-- Menu Screen -->
+    <div id="menu" class="screen">
+        <div class="menu-container">
+            <div class="menu-header">
+                <div class="kitty-menu">🐱</div>
+                <h1 class="menu-title">Meri Jaaaaaaaaaaaaannnnnnnn❤️</h1>
+                <p class="menu-subtitle">Choose Your Adventure</p>
+            </div>
+
+            <div class="menu-card" onclick="showScreen('letter')">
+                <div class="menu-card-icon">💌</div>
+                <h3 class="menu-card-title">Love Letter</h3>
+                <p class="menu-card-desc">Words straight from my heart</p>
+            </div>
+
+            <div class="menu-card" onclick="showScreen('moments')">
+                <div class="menu-card-icon">✨</div>
+                <h3 class="menu-card-title">Flip the Feelings</h3>
+                <p class="menu-card-desc">Discover hidden emotions</p>
+            </div>
+
+            <div class="menu-card" onclick="showScreen('playlist')">
+                <div class="menu-card-icon">🎵</div>
+                <h3 class="menu-card-title">Our Playlist</h3>
+                <p class="menu-card-desc">Songs dedicated to you</p>
+            </div>
+
+            <div class="menu-card" onclick="showScreen('game')">
+                <div class="menu-card-icon">🎮</div>
+                <h3 class="menu-card-title">Spin Game</h3>
+                <p class="menu-card-desc">Cute messages & fun dares</p>
+            </div>
+        </div>
     </div>
-    <button class="back-btn" onclick="showScreen('menu')">Back ⬅️</button>
-</div>
 
-<!-- GAME SCREEN -->
-<div id="game" class="screen">
-    <h2>Memory Game 🧠</h2>
-    <div class="game-board" id="gameBoard"></div>
-    <button class="back-btn" onclick="showScreen('menu')">Back ⬅️</button>
-</div>
+    <!-- Letter Screen -->
+    <div id="letter" class="screen">
+        <button class="back-btn" onclick="resetLetter()">✕</button>
+        <div class="letter-container">
+            <div id="envelope" class="envelope" onclick="openLetter()">
+                💌
+                <p class="envelope-text">Click to open</p>
+            </div>
+            <div id="letterCard" class="letter-card hidden">
+                <div class="letter-kitty">😻</div>
+                <div class="letter-hearts">
+                    <span>💕</span>
+                    <span>💜</span>
+                </div>
+                <h2 class="letter-title">Meri Bacchiii♥️</h2>
+                <div class="letter-content" id="letterContent">
+Saraaaa♥️
+Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha tumne aaj call karke sorry bola lekin mujhe bhi sorry kehna hai shayad main thoda zyada rude ho gaya tha jab mujhe bas shant rehna chahiye tha mujhe tumse ladna bilkul pasand nahi hai kyunki har baar jab hum door hote hain lagta hai jaise kuch andar se adhura ho gaya ho
 
-<script src="script.js" defer></script>
+Tum waise hi rare ho jaise duniya mein bas ek hi misal ho sirf tumhara chehra nahi tumhari aankhon ka sukoon tumhare words ka warmth sab kuch mujhe feel karata hai ki main kitna lucky hoon tumhe dekh kar sirf attraction nahi hota ek gehra connection hota hai ek aisi feeling jo dil ke andar tak utar jaati hai tum meri calmness bhi ho aur meri madness bhi tumhe dekh kar dil ka beast jaag jaata hai lekin tumhare paas rehkar wo beast bhi peaceful ho jaata hai
+
+Main seriously blessed hoon Sara tum meri life ki sabse khoobsurat reality ho main promise karta hoon aage se zyada samjhdari aur pyaar se baat karunga main hamesha tumhe choose karunga har baar bina ego ke bina gusse ke bas dil se
+
+<br><br>
+I Lykeeeeeeeeeeeeeeeee Uuuuuuuuuuuuuuuuuuuuuuuuuhhhhhhhhhhhhhhhhhhhhhh Meri Jaaaaaaaaaaaaaaaaaaaaaaaannnnnnnnnnnnnn❤️💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋
+                </div>
+                <div class="letter-signature">With all my love,<br>Sayed Asif</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Moments Screen -->
+    <div id="moments" class="screen">
+        <button class="back-btn" onclick="showScreen('menu')">✕</button>
+        <div class="menu-container">
+            <div class="moments-header">
+                <div class="kitty-menu">🐈</div>
+                <h2 class="moments-title">Special Moments</h2>
+                <p class="moments-subtitle">Tap to flip & discover ✨</p>
+            </div>
+
+            <div class="moment-card" onclick="this.classList.toggle('flipped')">
+                <div class="moment-card-inner">
+                    <div class="moment-front">
+                        <div class="moment-icon">😸</div>
+                        <p class="moment-text">Tumhra naam hi sukoon hai</p>
+                        <p class="moment-hint">Tap to flip! 👆</p>
+                    </div>
+                    <div class="moment-back bg-yellow">
+                        <p class="moment-back-text">Jab bhi tumhra naam leta hoon na Saraaaa❤️ dil ek ajeeb si raahat mehsoos karta hai jaise duniya ruk gayi ho aur sirf hum dono reh gaye ho</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="moment-card" onclick="this.classList.toggle('flipped')">
+                <div class="moment-card-inner">
+                    <div class="moment-front">
+                        <div class="moment-icon">😻</div>
+                        <p class="moment-text">Tumhre bina sab adhoora lagta hai</p>
+                        <p class="moment-hint">Tap to flip! 👆</p>
+                    </div>
+                    <div class="moment-back bg-pink">
+                        <p class="moment-back-text">Tumhra na hona jaise saansein ruk jaayein sab theek hota hai bas tum mere paas ho toh duniya perfect lagti hai</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="moment-card" onclick="this.classList.toggle('flipped')">
+                <div class="moment-card-inner">
+                    <div class="moment-front">
+                        <div class="moment-icon">😽</div>
+                        <p class="moment-text">Tumhra touch mein ek jaadu hai</p>
+                        <p class="moment-hint">Tap to flip! 👆</p>
+                    </div>
+                    <div class="moment-back bg-blue">
+                        <p class="moment-back-text">Jab tumhra haath mere haath mein aata hai na Saraaaa❤️ toh lagta hai jaise har lamha zinda ho gaya ho jaise har saans tujhme basi ho</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="moment-card" onclick="this.classList.toggle('flipped')">
+                <div class="moment-card-inner">
+                    <div class="moment-front">
+                        <div class="moment-icon">🐱</div>
+                        <p class="moment-text">Tu meri sabse khoobsurat aadat hai</p>
+                        <p class="moment-hint">Tap to flip! 👆</p>
+                    </div>
+                    <div class="moment-back bg-purple">
+                        <p class="moment-back-text">Har din tum meri aadat banti ja rahi hai woh aadat jise chhodna mushkil nahi balki namumkin hai Saraaaa❤️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playlist Screen -->
+    <div id="playlist" class="screen">
+        <button class="back-btn" onclick="showScreen('menu')">✕</button>
+        <div class="menu-container">
+            <div class="playlist-header">
+                <div class="playlist-kitty">🎧😺</div>
+                <h2 class="playlist-title">Playlist For You</h2>
+                <p class="playlist-subtitle">Songs dedicated to u</p>
+            </div>
+            <!-- Add your song cards here (same as existing) -->
+        </div>
+    </div>
+
+    <!-- Spin Game Screen -->
+    <div id="game" class="screen">
+        <button class="back-btn" onclick="showScreen('menu')">✕</button>
+        <div class="game-container">
+            <div class="game-header">
+                <div class="game-kitty">🎮😺</div>
+                <h2 class="game-title">Spin Wheel Game</h2>
+                <p class="game-subtitle">Cute messages & fun dares!</p>
+            </div>
+            <div class="wheel-container">
+                <canvas id="wheel" width="300" height="300"></canvas>
+                <button class="reset-btn" onclick="spinWheel()">🎯 Spin!</button>
+            </div>
+            <div class="win-message" id="spinMessage"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
