@@ -1,199 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saraaaa❤️ Gift 💝</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag Papers ❤️</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&display=swap'>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-image: url("https://www.psdgraphics.com/wp-content/uploads/2022/01/white-math-paper-texture.jpg");
+      background-position: center center;
+      overflow: hidden;
+      touch-action: none;
+      transition: background-color 1s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .paper {
+      background-image: url("https://i0.wp.com/textures.world/wp-content/uploads/2018/10/2-Millimeter-Paper-Background-copy.jpg?ssl=1");
+      background-size: 500px;
+      background-position: center center;
+      padding: 20px 60px;
+      transform: rotateZ(-5deg);
+      box-shadow: 1px 15px 20px 0px rgba(0,0,0,0.5);
+      position: absolute;
+      cursor: move;
+      transition: box-shadow 0.3s ease, transform 0.2s ease, opacity 0.4s ease;
+      border-radius: 6px;
+      user-select: none;
+    }
 
-        .paper {
-            position: absolute;
-            width: 280px;
-            height: 180px;
-            background: #fff8dc;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            font-size: 16px;
-            color: #333;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-            touch-action: none;
-        }
+    .paper:active {
+      box-shadow: 1px 25px 40px 0px rgba(0,0,0,0.7);
+      transform: scale(1.03) rotateZ(var(--rot, -5deg));
+    }
 
-        .paper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
+    /* Breathing effect */
+    .breathe {
+      animation: breathe 5s ease-in-out infinite;
+    }
+    @keyframes breathe{
+      0%{transform: scale(1) rotateZ(var(--rot, -5deg)); box-shadow: 1px 15px 20px rgba(0,0,0,0.45)}
+      50%{transform: scale(1.02) rotateZ(calc(var(--rot, -5deg) + 0.4deg)); box-shadow: 0 30px 60px rgba(255,110,140,0.06)}
+      100%{transform: scale(1) rotateZ(var(--rot, -5deg)); box-shadow: 1px 15px 20px rgba(0,0,0,0.45)}
+    }
 
-        .paper:active {
-            transform: scale(1.05);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-        }
+    .paper.heart {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      padding: 0;
+      border-radius: 50%;
+    }
 
-        .surprise {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            text-align: center;
-            animation: fadeIn 1s ease forwards;
-        }
+    .paper.heart::after {
+      content: "";
+      background-image: url('https://cdn.pixabay.com/photo/2016/03/31/19/25/cartoon-1294994__340.png');
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: 120px;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.6;
+      pointer-events: none;
+    }
 
-        .surprise h2 {
-            font-size: 1.8rem;
-            color: #d63384;
-            margin-bottom: 15px;
-        }
+    .paper.image {
+      padding: 15px;
+      max-width: 280px;
+    }
 
-        .back-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            background-color: #ff85a2;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
+    .paper.image p {
+      font-size: 22px;
+      margin: 8px 0;
+      text-align: center;
+    }
 
-        .back-btn:hover {
-            background-color: #ff5c8a;
-        }
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: cover;
+      user-select: none;
+      display: block;
+      margin: 10px auto;
+      -webkit-user-drag: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
+    p {
+      font-family: 'Zeyada', cursive;
+      font-size: 36px;
+      color: rgb(0,0,100);
+      opacity: 0.75;
+      user-select: none;
+      margin: 5px 0;
+      text-align: center;
+    }
 
-        @media (max-width: 768px) {
-            .paper {
-                width: 220px;
-                height: 140px;
-                font-size: 14px;
-            }
+    .paper.red {
+      background-color: rgba(255, 200, 200, 0.3);
+    }
 
-            .surprise {
-                width: 85%;
-                padding: 20px;
-            }
+    .p1, .p2 {
+      text-align: center;
+    }
 
-            .surprise h2 {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
+    .refresh-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 50px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      font-family: 'Zeyada', cursive;
+      font-size: 28px;
+      color: rgb(0,0,100);
+      z-index: 10000;
+      display: none;
+      text-align: center;
+    }
+
+    /* Secret reveal style */
+    .secretText {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      font-size: 18px;
+      color: rgba(160,30,80,0.0);
+      text-align: center;
+      transition: color 0.6s ease, transform 0.6s ease, opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .secretText.show {
+      color: rgba(160,30,80,1);
+      transform: translateY(-6px);
+      opacity: 1;
+      text-shadow: 0 6px 18px rgba(255,140,170,0.18);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      body { background-size: 800px; }
+
+      .paper { padding: 12px 35px; max-width: 85vw; }
+
+      .paper.image { padding: 12px; max-width: 240px; }
+
+      .paper.image p { font-size: 18px; margin: 6px 0; }
+
+      img { max-height: 350px; border-radius: 6px; }
+
+      .paper.heart { width: 110px; height: 110px; }
+
+      .paper.heart::after { background-size: 80px; }
+
+      p { font-size: 26px; }
+
+      .refresh-message { padding: 20px 30px; font-size: 20px; max-width: 85vw; }
+
+      .secretText { font-size: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      body { background-size: 600px; }
+      .paper { padding: 10px 25px; max-width: 90vw; }
+      .paper.image { padding: 10px; max-width: 200px; }
+      .paper.image p { font-size: 16px; margin: 5px 0; }
+      img { max-height: 280px; border-radius: 5px; }
+      .paper.heart { width: 90px; height: 90px; }
+      .paper.heart::after { background-size: 65px; }
+      p { font-size: 20px; }
+      .refresh-message { padding: 15px 20px; font-size: 18px; max-width: 90vw; }
+      .secretText { font-size: 14px; }
+    }
+
+    /* Final overlay */
+    .finalOverlay {
+      position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; transition:opacity .6s ease; z-index:10001;
+    }
+    .finalOverlay.show { opacity:1; pointer-events:auto; }
+    .finalCard { background: rgba(255,255,255,0.95); padding: 28px 36px; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align:center; max-width:90vw; }
+    .finalCard h1 { font-family: 'Zeyada', cursive; font-size: 40px; margin-bottom:8px; }
+    .finalCard p { font-size:18px; color:#333; margin-bottom:14px }
+    .finalCard button { background:#ff6b92;color:white;border:none;padding:10px 14px;border-radius:10px;cursor:pointer }
+
+    /* particle canvas */
+    canvas.particles { position:fixed; inset:0; pointer-events:none; z-index:10000 }
+  </style>
 </head>
 <body>
-    <div class="container" id="mainContainer">
-        <div class="paper" style="top: 20%; left: 25%;">You're my favorite kind of forever ❤️</div>
-        <div class="paper" style="top: 40%; left: 55%;">Every memory with you feels like a dream 💫</div>
-        <div class="paper" style="top: 65%; left: 35%;">Saraaaa❤️ you're the reason behind my smile 🌸</div>
-        <div class="paper" style="top: 35%; left: 40%; background: #ffdee9;">Click me for a surprise 🎁</div>
+  <div class="refresh-message" id="refreshMessage">Refreshing... Starting over! ❤️</div>
 
-        <div class="surprise" id="surpriseBox">
-            <h2>✨ Saraaaa❤️ you're my rarest magic ✨</h2>
-            <p>Every heartbeat of mine hums your name. You're my peace, my chaos, and my world. 💖</p>
-            <button class="back-btn" id="backBtn">Go Back</button>
-        </div>
+  <div class="paper" id="lastPaper">
+    <p class="p1">Drop me to seeehhh what happen's!</p>
+  </div>
+
+  <div class="paper heart breathe" id="heartPaper"></div>
+  
+  <div class="paper image breathe">
+    <p>and I fallen in</p>
+    <p>Love with You 😍</p>
+    <img src="images/1.jpeg" alt="Love" />
+    <div class="secretText" data-text="My secret: you are my peace."></div>
+  </div>
+
+  <div class="paper image breathe">
+    <p>See how beautiful</p>
+    <p>We look together</p>
+    <img src="images/2.jpeg" alt="Moment" />
+    <div class="secretText" data-text="My secret: I dream of forever with you."></div>
+  </div>
+
+  <div class="paper image breathe">
+    <p>Couple goals❤️</p>
+    <img src="images/3.jpeg" alt="Cute" />
+    <div class="secretText" data-text="My secret: your laugh is my favorite song."></div>
+  </div>
+
+  <div class="paper image breathe">
+    <p>How can be</p>
+    <p>someone so cute ❤️</p>
+    <img src="images/4.jpeg" alt="Cute" />
+    <div class="secretText" data-text="My secret: I get lost in your eyes."></div>
+  </div>
+
+  <div class="paper image breathe">
+    <p>Meri Jaaaaaaaaaannnn❤️</p>
+    <img src="images/5.jpeg" alt="Cute" />
+    <div class="secretText" data-text="My secret: you make every day brighter."></div>
+  </div>
+
+  <div class="paper image breathe">
+    <p>Apka Shohar❤️</p>
+    <img src="images/6.jpeg" alt="Cute" />
+    <div class="secretText" data-text="My secret: I want to grow old with you."></div>
+  </div>
+
+  <div class="paper red breathe">
+    <p class="p1">and My Favorite</p>
+    <p class="p2">Person 😍</p>
+    <div class="secretText" data-text="My secret: every heartbeat is for you."></div>
+  </div>
+
+  <div class="paper breathe">
+    <p class="p1">Meri Pyriiii</p>
+    <p class="p1"> Saraaaaaaaaa❤️<span style="color: red !important;">❤️</span></p>
+    <div class="secretText" data-text="My secret: say yes to forever with me."></div>
+  </div>
+
+  <!-- final overlay and particle canvas -->
+  <canvas class="particles" id="particleCanvas"></canvas>
+  <div class="finalOverlay" id="finalOverlay">
+    <div class="finalCard">
+      <h1 id="finalTitle">I Love You Saraaaa❤️</h1>
+      <p id="finalSub">You are my rarest magic — forever and always.</p>
+      <button id="goBackBtn">Go Back</button>
     </div>
+  </div>
 
-    <script>
-        const papers = document.querySelectorAll('.paper');
-        const surprise = document.getElementById('surpriseBox');
-        const mainContainer = document.getElementById('mainContainer');
-        const backBtn = document.getElementById('backBtn');
+  <script>
+    // Keep original drag behaviour but enhance with features
+    let highestZ = 1;
+    let lastPaperDragged = false;
 
-        papers.forEach((paper) => {
-            let offsetX, offsetY, isDragging = false;
+    // particle setup
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    function fit(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+    fit(); window.addEventListener('resize', fit);
+    const particles = [];
+    function spawnHeart(x,y){
+      particles.push({x,y,vx:(Math.random()-0.5)*1.2,vy:-1.2+Math.random()*-0.6,life:120,size:6+Math.random()*6,angle:Math.random()*Math.PI*2, alpha:1});
+    }
+    function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let i=particles.length-1;i>=0;i--){ const p = particles[i]; p.x+=p.vx; p.y+=p.vy; p.life--; p.alpha = p.life/120; ctx.save(); ctx.globalAlpha=p.alpha; drawHeart(ctx,p.x,p.y,p.size); ctx.restore(); if(p.life<=0) particles.splice(i,1); }
+      requestAnimationFrame(draw);
+    }
+    function drawHeart(c,x,y,s){ c.beginPath(); const top = y - s*0.4; c.moveTo(x, top + s/2); c.bezierCurveTo(x + s, top - s/2, x + s*1.6, top + s/1.2, x, top + s*1.8); c.bezierCurveTo(x - s*1.6, top + s/1.2, x - s, top - s/2, x, top + s/2); c.fillStyle = 'rgba(255,110,140,0.95)'; c.fill(); }
+    requestAnimationFrame(draw);
 
-            paper.addEventListener('mousedown', startDrag);
-            paper.addEventListener('touchstart', startDrag);
+    // simple audio using WebAudio for small feedback
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const A = new AudioCtx();
+    function tapTone(){ try{ const o=A.createOscillator(); const g=A.createGain(); o.type='sine'; o.frequency.value=430; g.gain.value=0.02; o.connect(g); g.connect(A.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.0001, A.currentTime+0.12); o.stop(A.currentTime+0.14);}catch(e){} }
+    document.addEventListener('pointerdown', ()=>{ if(A.state==='suspended') A.resume(); });
 
-            function startDrag(e) {
-                isDragging = true;
-                const rect = paper.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                offsetX = clientX - rect.left;
-                offsetY = clientY - rect.top;
-                paper.style.zIndex = 1000;
-            }
-
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', drag);
-
-            function drag(e) {
-                if (!isDragging) return;
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                paper.style.left = `${clientX - offsetX}px`;
-                paper.style.top = `${clientY - offsetY}px`;
-            }
-
-            document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchend', endDrag);
-
-            function endDrag() {
-                if (isDragging) {
-                    isDragging = false;
-                    paper.style.zIndex = '';
-                }
-            }
-
-            paper.addEventListener('click', () => {
-                if (paper.textContent.includes('Click me')) {
-                    showSurprise();
-                }
-            });
+    // attach drag behaviour similar to original but with tilt + long-press secret reveal
+    class Paper {
+      holdingPaper = false; startX=0; startY=0; moveX=0; moveY=0; prevX=0; prevY=0; velX=0; velY=0; rotation=0; currentPaperX=0; currentPaperY=0; rotating=false; hasMoved=false; longPress=null;
+      init(paper){
+        const isLastPaper = paper.id === 'lastPaper';
+        paper.style.touchAction='none';
+        paper.addEventListener('pointerdown', (e)=>{
+          if(e.button === 2) return;
+          this.holdingPaper=true; paper.style.zIndex = highestZ++; this.startX = e.clientX; this.startY = e.clientY; this.prevX = this.startX; this.prevY = this.startY; this.longPress = setTimeout(()=>{ this.showSecret(paper); },700); paper.setPointerCapture(e.pointerId);
+          // tilt up
+          paper.style.transition='transform 0.12s ease, box-shadow 0.12s ease';
+          paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg) scale(1.04)`;
+          paper.style.boxShadow = '1px 30px 60px rgba(0,0,0,0.45)';
+          // spawn small hearts
+          spawnHeart(e.clientX,e.clientY); tapTone();
         });
 
-        function showSurprise() {
-            papers.forEach(p => p.style.display = 'none');
-            surprise.style.display = 'flex';
-        }
-
-        backBtn.addEventListener('click', () => {
-            surprise.style.display = 'none';
-            papers.forEach(p => p.style.display = 'flex');
+        window.addEventListener('pointermove', (e)=>{
+          if(!this.holdingPaper) return;
+          this.moveX = e.clientX; this.moveY = e.clientY; this.velX = this.moveX - this.prevX; this.velY = this.moveY - this.prevY;
+          this.currentPaperX += this.velX; this.currentPaperY += this.velY; this.prevX = this.moveX; this.prevY = this.moveY; this.hasMoved = true;
+          // rotate slightly based on velocity
+          this.rotation = Math.max(-25, Math.min(25, this.rotation + this.velX*0.03));
+          paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+          // spawn trailing particles
+          spawnHeart(e.clientX, e.clientY);
         });
-    </script>
+
+        window.addEventListener('pointerup', ()=>{
+          if(this.longPress) { clearTimeout(this.longPress); this.longPress = null; }
+          if(this.holdingPaper && isLastPaper && this.hasMoved){ triggerFinal(); }
+          this.holdingPaper=false; this.rotating=false; // settle with gentle spring
+          paper.style.transition='transform 0.6s cubic-bezier(.22,.9,.31,1), box-shadow 0.5s ease';
+          paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+          paper.style.boxShadow = '1px 15px 20px 0px rgba(0,0,0,0.5)';
+        });
+
+        // prevent context menu
+        paper.addEventListener('contextmenu', e=>e.preventDefault());
+      }
+      showSecret(paper){ const s = paper.querySelector('.secretText'); if(!s) return; s.textContent = s.dataset.text || ''; s.classList.add('show'); // auto hide after time
+        setTimeout(()=> s.classList.remove('show'), 3500); tapTone(); for(let i=0;i<6;i++){ spawnHeart(paper.getBoundingClientRect().left + paper.offsetWidth/2 + (Math.random()-0.5)*80, paper.getBoundingClientRect().top + (Math.random()*20)); }
+      }
+    }
+
+    const papers = Array.from(document.querySelectorAll('.paper'));
+    papers.forEach((paper, i)=>{
+      // retain original stacking and positions similar to user's original look
+      paper.style.zIndex = i+1;
+      // place them in slightly offset stack if no inline position was provided
+      if(!paper.style.left) paper.style.left = (30 + i*12)+'px';
+      if(!paper.style.top) paper.style.top = (30 + i*8)+'px';
+      const rot = (Math.random()*20-10).toFixed(2);
+      paper.style.setProperty('--rot', rot+'deg');
+      paper.style.transform = `translateX(0px) translateY(0px) rotateZ(${rot}deg)`;
+      const p = new Paper(); p.init(paper);
+    });
+
+    // final overlay logic
+    const finalOverlay = document.getElementById('finalOverlay');
+    const goBackBtn = document.getElementById('goBackBtn');
+    let finalShown = false;
+    function triggerFinal(){ if(finalShown) return; finalShown = true; lastPaperDragged = true;
+      // play gentle sequence: float papers up and fade
+      papers.forEach((p, idx)=>{ setTimeout(()=>{ p.style.transition = 'transform 1.6s ease, opacity 1.6s ease'; p.style.transform += ` translateY(-${200 + Math.random()*200}px) rotateZ(${Math.random()*160-80}deg) scale(0.9)`; p.style.opacity = '0'; }, idx*100); });
+      // after float show overlay with hearts
+      setTimeout(()=>{ finalOverlay.classList.add('show'); // spawn some hearts
+        for(let i=0;i<40;i++){ setTimeout(()=>{ spawnHeart(innerWidth/2 + (Math.random()-0.5)*240, innerHeight/2 + (Math.random()-0.5)*120); }, i*60); }
+      }, 1300);
+    }
+
+    goBackBtn.addEventListener('click', ()=>{
+      // hide overlay
+      finalOverlay.classList.remove('show'); finalShown = false; lastPaperDragged = false;
+      // bring papers back with animation to original positions
+      papers.forEach((p, idx)=>{ p.style.transition = 'transform 0.9s cubic-bezier(.22,.9,.31,1), opacity 0.9s ease'; p.style.opacity = '1'; // reset transform to original translate (we stored original as 0)
+        const rot = p.style.getPropertyValue('--rot') || '-5deg';
+        p.style.transform = `translateX(0px) translateY(0px) rotateZ(${rot})`;
+        // reset currentPaperX/Y by reloading page-like initial state
+        // remove inline left/top to keep user's original layout
+      });
+    });
+
+    // tap anywhere to spawn 1-3 hearts
+    document.addEventListener('pointerdown', (e)=>{ for(let i=0;i<1+Math.floor(Math.random()*3);i++){ spawnHeart(e.clientX + (Math.random()-0.5)*20, e.clientY + (Math.random()-0.5)*20); } tapTone(); });
+
+    // prevent accidental scroll on touch
+    document.body.addEventListener('touchmove', (e)=>{ e.preventDefault(); }, {passive:false});
+
+    // double-click lastPaper to test final
+    const lastP = document.getElementById('lastPaper'); lastP.addEventListener('dblclick', ()=> triggerFinal());
+
+  </script>
 </body>
 </html>
