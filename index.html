@@ -1,185 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saraaaa's❤️ Gift 💝</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag Papers ❤️</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&display=swap'>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-image: url("https://www.psdgraphics.com/wp-content/uploads/2022/01/white-math-paper-texture.jpg");
+      background-position: center center;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .paper {
+      background-image: url("https://i0.wp.com/textures.world/wp-content/uploads/2018/10/2-Millimeter-Paper-Background-copy.jpg?ssl=1");
+      background-size: 500px;
+      background-position: center center;
+      padding: 20px 60px;
+      transform: rotateZ(-5deg);
+      box-shadow: 1px 15px 20px 0px rgba(0,0,0,0.5);
+      position: absolute;
+      cursor: move;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .paper:active {
+      box-shadow: 1px 20px 30px 0px rgba(0,0,0,0.7);
+    }
+
+    .paper.heart {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    .paper.heart::after {
+      content: "";
+      background-image: url('https://cdn.pixabay.com/photo/2016/03/31/19/25/cartoon-1294994__340.png');
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: 120px;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.6;
+    }
+
+    .paper.image {
+      padding: 10px;
+    }
+
+    .paper.image p {
+      font-size: 24px;
+      margin: 5px 0;
+    }
+
+    img {
+      max-height: 180px;
+      max-width: 100%;
+      width: auto;
+      user-select: none;
+      display: block;
+      margin: 10px auto;
+      -webkit-user-drag: none;
+    }
+
+    p {
+      font-family: 'Zeyada', cursive;
+      font-size: 36px;
+      color: rgb(0,0,100);
+      opacity: 0.75;
+      user-select: none;
+      margin: 5px 0;
+    }
+
+    .paper.red {
+      background-color: rgba(255, 200, 200, 0.3);
+    }
+
+    .p1, .p2 {
+      text-align: center;
+    }
+
+    .refresh-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 50px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      font-family: 'Zeyada', cursive;
+      font-size: 28px;
+      color: rgb(0,0,100);
+      z-index: 10000;
+      display: none;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .paper {
+        padding: 15px 40px;
+        max-width: 90vw;
+      }
+
+      .paper.heart {
+        width: 120px;
+        height: 120px;
+      }
+
+      .paper.heart::after {
+        background-size: 90px;
+      }
+
+      .paper.image {
+        padding: 8px;
+      }
+
+      .paper.image p {
+        font-size: 18px;
+      }
+
+      img {
+        max-height: 150px;
+      }
+
+      p {
+        font-size: 28px;
+      }
+
+      .refresh-message {
+        padding: 20px 30px;
+        font-size: 22px;
+        max-width: 80vw;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .paper {
+        padding: 10px 30px;
+      }
+
+      .paper.heart {
+        width: 100px;
+        height: 100px;
+      }
+
+      .paper.heart::after {
+        background-size: 70px;
+      }
+
+      .paper.image p {
+        font-size: 16px;
+      }
+
+      img {
+        max-height: 120px;
+      }
+
+      p {
+        font-size: 22px;
+      }
+
+      .refresh-message {
+        padding: 15px 25px;
+        font-size: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="floating-hearts" id="floatingHearts"></div>
+  <div class="refresh-message" id="refreshMessage">
+    Refreshing... Starting over! ❤️
+  </div>
 
-    <!-- Welcome Screen -->
-    <div id="welcome" class="screen active">
-        <div class="welcome-content">
-            <div class="kitty-welcome">😺</div>
-            <div class="welcome-emoji">💝</div>
-            <h1 class="welcome-title">Hello Saraaaa❤️</h1>
-            <p class="welcome-subtitle">Something Special for You ♥</p>
-            <button class="btn-primary" onclick="showScreen('menu')">Open Gift 🎁</button>
-        </div>
-    </div>
+  <div class="paper heart"></div>
+  
+  <div class="paper image">
+    <p>and I fallen in</p>
+    <p>Love with You 😍</p>
+    <img src="images/1.jpeg" alt="Love" />
+  </div>
 
-    <!-- Menu Screen -->
-    <div id="menu" class="screen">
-        <div class="menu-container">
-            <div class="menu-header">
-                <div class="kitty-menu">🐱</div>
-                <h1 class="menu-title">Meri Jaaaaaaaaaaaaannnnnnnn❤️</h1>
-                <p class="menu-subtitle">Choose Your Adventure</p>
-            </div>
+  <div class="paper image">
+    <p></p>
+    <img src="images/2.jpeg" alt="Moment" />
+  </div>
 
-            <div class="menu-card" onclick="showScreen('letter')">
-                <div class="menu-card-icon">💌</div>
-                <h3 class="menu-card-title">Love Letter</h3>
-                <p class="menu-card-desc">Words straight from my heart</p>
-            </div>
+  <div class="paper image">
+    <p>How can be</p>
+    <p>someone so cute ❤️</p>
+    <img src="images/3.jpg" alt="Cute" />
+  </div>
 
-            <div class="menu-card" onclick="showScreen('moments')">
-                <div class="menu-card-icon">✨</div>
-                <h3 class="menu-card-title">Flip the Feelings</h3>
-                <p class="menu-card-desc">Discover hidden emotions</p>
-            </div>
+  <div class="paper red">
+    <p class="p1">and My Favorite</p>
+    <p class="p2">Person 😍</p>
+  </div>
 
-            <div class="menu-card" onclick="showScreen('playlist')">
-                <div class="menu-card-icon">🎵</div>
-                <h3 class="menu-card-title">Our Playlist</h3>
-                <p class="menu-card-desc">Songs dedicated to you</p>
-            </div>
+  <div class="paper">
+    <p class="p1">You are Cute</p>
+    <p class="p1">Amazing <span style="color: red !important;">❤️</span></p>
+  </div>
 
-            <div class="menu-card" onclick="showScreen('game')">
-                <div class="menu-card-icon">🎮</div>
-                <h3 class="menu-card-title">Spin Game</h3>
-                <p class="menu-card-desc">Cute messages & fun dares</p>
-            </div>
-        </div>
-    </div>
+  <div class="paper" id="lastPaper">
+    <p class="p1">Drag the papers to move!</p>
+  </div>
 
-    <!-- Letter Screen -->
-    <div id="letter" class="screen">
-        <button class="back-btn" onclick="resetLetter()">✕</button>
-        <div class="letter-container">
-            <div id="envelope" class="envelope" onclick="openLetter()">
-                💌
-                <p class="envelope-text">Click to open</p>
-            </div>
-            <div id="letterCard" class="letter-card hidden">
-                <div class="letter-kitty">😻</div>
-                <div class="letter-hearts">
-                    <span>💕</span>
-                    <span>💜</span>
-                </div>
-                <h2 class="letter-title">Meri Bacchiii♥️</h2>
-                <div class="letter-content" id="letterContent">
-Saraaaa♥️
-Kal raat jo hua uske baare mein main soch raha tha aur mujhe yeh feel hua ki main bhi galat tha tumne aaj call karke sorry bola lekin mujhe bhi sorry kehna hai shayad main thoda zyada rude ho gaya tha jab mujhe bas shant rehna chahiye tha mujhe tumse ladna bilkul pasand nahi hai kyunki har baar jab hum door hote hain lagta hai jaise kuch andar se adhura ho gaya ho
+  <script>
+    let highestZ = 1;
+    let lastPaperDragged = false;
 
-Tum waise hi rare ho jaise duniya mein bas ek hi misal ho sirf tumhara chehra nahi tumhari aankhon ka sukoon tumhare words ka warmth sab kuch mujhe feel karata hai ki main kitna lucky hoon tumhe dekh kar sirf attraction nahi hota ek gehra connection hota hai ek aisi feeling jo dil ke andar tak utar jaati hai tum meri calmness bhi ho aur meri madness bhi tumhe dekh kar dil ka beast jaag jaata hai lekin tumhare paas rehkar wo beast bhi peaceful ho jaata hai
+    class Paper {
+      holdingPaper = false;
+      startX = 0;
+      startY = 0;
+      moveX = 0;
+      moveY = 0;
+      prevX = 0;
+      prevY = 0;
+      velX = 0;
+      velY = 0;
+      rotation = Math.random() * 30 - 15;
+      currentPaperX = 0;
+      currentPaperY = 0;
+      rotating = false;
+      hasMoved = false;
 
-Main seriously blessed hoon Sara tum meri life ki sabse khoobsurat reality ho main promise karta hoon aage se zyada samjhdari aur pyaar se baat karunga main hamesha tumhe choose karunga har baar bina ego ke bina gusse ke bas dil se
+      init(paper) {
+        const isLastPaper = paper.id === 'lastPaper';
+        
+        // Mouse events
+        document.addEventListener('mousemove', (e) => {
+          if (!this.rotating) {
+            this.moveX = e.clientX;
+            this.moveY = e.clientY;
+            this.velX = this.moveX - this.prevX;
+            this.velY = this.moveY - this.prevY;
+          }
 
-<br><br>
-I Lykeeeeeeeeeeeeeeeee Uuuuuuuuuuuuuuuuuuuuuuuuuhhhhhhhhhhhhhhhhhhhhhh Meri Jaaaaaaaaaaaaaaaaaaaaaaaannnnnnnnnnnnnn❤️💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋💋
-                </div>
-                <div class="letter-signature">With all my love,<br>Sayed Asif</div>
-            </div>
-        </div>
-    </div>
+          if (this.holdingPaper) {
+            const dirX = e.clientX - this.startX;
+            const dirY = e.clientY - this.startY;
+            const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
+            
+            if (dirLength > 0) {
+              const dirNormalizedX = dirX / dirLength;
+              const dirNormalizedY = dirY / dirLength;
+              const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+              let degrees = 180 * angle / Math.PI;
+              degrees = (360 + Math.round(degrees)) % 360;
+              
+              if (this.rotating) {
+                this.rotation = degrees;
+              }
+            }
 
-    <!-- Moments Screen -->
-    <div id="moments" class="screen">
-        <button class="back-btn" onclick="showScreen('menu')">✕</button>
-        <div class="menu-container">
-            <div class="moments-header">
-                <div class="kitty-menu">🐈</div>
-                <h2 class="moments-title">Special Moments</h2>
-                <p class="moments-subtitle">Tap to flip & discover ✨</p>
-            </div>
+            if (!this.rotating) {
+              this.currentPaperX += this.velX;
+              this.currentPaperY += this.velY;
+              this.hasMoved = true;
+            }
+            
+            this.prevX = this.moveX;
+            this.prevY = this.moveY;
+            paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+          }
+        });
 
-            <div class="moment-card" onclick="this.classList.toggle('flipped')">
-                <div class="moment-card-inner">
-                    <div class="moment-front">
-                        <div class="moment-icon">😸</div>
-                        <p class="moment-text">Tumhra naam hi sukoon hai</p>
-                        <p class="moment-hint">Tap to flip! 👆</p>
-                    </div>
-                    <div class="moment-back bg-yellow">
-                        <p class="moment-back-text">Jab bhi tumhra naam leta hoon na Saraaaa❤️ dil ek ajeeb si raahat mehsoos karta hai jaise duniya ruk gayi ho aur sirf hum dono reh gaye ho</p>
-                    </div>
-                </div>
-            </div>
+        paper.addEventListener('mousedown', (e) => {
+          if (this.holdingPaper) return;
+          this.holdingPaper = true;
+          paper.style.zIndex = highestZ;
+          highestZ += 1;
 
-            <div class="moment-card" onclick="this.classList.toggle('flipped')">
-                <div class="moment-card-inner">
-                    <div class="moment-front">
-                        <div class="moment-icon">😻</div>
-                        <p class="moment-text">Tumhre bina sab adhoora lagta hai</p>
-                        <p class="moment-hint">Tap to flip! 👆</p>
-                    </div>
-                    <div class="moment-back bg-pink">
-                        <p class="moment-back-text">Tumhra na hona jaise saansein ruk jaayein sab theek hota hai bas tum mere paas ho toh duniya perfect lagti hai</p>
-                    </div>
-                </div>
-            </div>
+          this.startX = e.clientX;
+          this.startY = e.clientY;
+          this.prevX = this.startX;
+          this.prevY = this.startY;
 
-            <div class="moment-card" onclick="this.classList.toggle('flipped')">
-                <div class="moment-card-inner">
-                    <div class="moment-front">
-                        <div class="moment-icon">😽</div>
-                        <p class="moment-text">Tumhra touch mein ek jaadu hai</p>
-                        <p class="moment-hint">Tap to flip! 👆</p>
-                    </div>
-                    <div class="moment-back bg-blue">
-                        <p class="moment-back-text">Jab tumhra haath mere haath mein aata hai na Saraaaa❤️ toh lagta hai jaise har lamha zinda ho gaya ho jaise har saans tujhme basi ho</p>
-                    </div>
-                </div>
-            </div>
+          if (e.button === 2) {
+            this.rotating = true;
+          }
+        });
 
-            <div class="moment-card" onclick="this.classList.toggle('flipped')">
-                <div class="moment-card-inner">
-                    <div class="moment-front">
-                        <div class="moment-icon">🐱</div>
-                        <p class="moment-text">Tu meri sabse khoobsurat aadat hai</p>
-                        <p class="moment-hint">Tap to flip! 👆</p>
-                    </div>
-                    <div class="moment-back bg-purple">
-                        <p class="moment-back-text">Har din tum meri aadat banti ja rahi hai woh aadat jise chhodna mushkil nahi balki namumkin hai Saraaaa❤️</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        window.addEventListener('mouseup', () => {
+          if (this.holdingPaper && isLastPaper && this.hasMoved) {
+            checkLastPaper();
+          }
+          this.holdingPaper = false;
+          this.rotating = false;
+        });
 
-    <!-- Playlist Screen -->
-    <div id="playlist" class="screen">
-        <button class="back-btn" onclick="showScreen('menu')">✕</button>
-        <div class="menu-container">
-            <div class="playlist-header">
-                <div class="playlist-kitty">🎧😺</div>
-                <h2 class="playlist-title">Playlist For You</h2>
-                <p class="playlist-subtitle">Songs dedicated to u</p>
-            </div>
-            <!-- Add your song cards here (same as existing) -->
-        </div>
-    </div>
+        // Touch events
+        paper.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          if (!this.rotating) {
+            this.moveX = e.touches[0].clientX;
+            this.moveY = e.touches[0].clientY;
+            this.velX = this.moveX - this.prevX;
+            this.velY = this.moveY - this.prevY;
+          }
 
-    <!-- Spin Game Screen -->
-    <div id="game" class="screen">
-        <button class="back-btn" onclick="showScreen('menu')">✕</button>
-        <div class="game-container">
-            <div class="game-header">
-                <div class="game-kitty">🎮😺</div>
-                <h2 class="game-title">Spin Wheel Game</h2>
-                <p class="game-subtitle">Cute messages & fun dares!</p>
-            </div>
-            <div class="wheel-container">
-                <canvas id="wheel" width="300" height="300"></canvas>
-                <button class="reset-btn" onclick="spinWheel()">🎯 Spin!</button>
-            </div>
-            <div class="win-message" id="spinMessage"></div>
-        </div>
-    </div>
+          if (this.holdingPaper) {
+            const dirX = e.touches[0].clientX - this.startX;
+            const dirY = e.touches[0].clientY - this.startY;
+            const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
+            
+            if (dirLength > 0) {
+              const dirNormalizedX = dirX / dirLength;
+              const dirNormalizedY = dirY / dirLength;
+              const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+              let degrees = 180 * angle / Math.PI;
+              degrees = (360 + Math.round(degrees)) % 360;
+              
+              if (this.rotating) {
+                this.rotation = degrees;
+              }
+            }
 
-    <script src="script.js"></script>
+            if (!this.rotating) {
+              this.currentPaperX += this.velX;
+              this.currentPaperY += this.velY;
+              this.hasMoved = true;
+            }
+            
+            this.prevX = this.moveX;
+            this.prevY = this.moveY;
+            paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+          }
+        }, { passive: false });
+
+        paper.addEventListener('touchstart', (e) => {
+          if (this.holdingPaper) return;
+          this.holdingPaper = true;
+          paper.style.zIndex = highestZ;
+          highestZ += 1;
+
+          this.startX = e.touches[0].clientX;
+          this.startY = e.touches[0].clientY;
+          this.prevX = this.startX;
+          this.prevY = this.startY;
+        });
+
+        paper.addEventListener('touchend', () => {
+          if (this.holdingPaper && isLastPaper && this.hasMoved) {
+            checkLastPaper();
+          }
+          this.holdingPaper = false;
+          this.rotating = false;
+        });
+
+        // Gesture events for rotation
+        paper.addEventListener('gesturestart', (e) => {
+          e.preventDefault();
+          this.rotating = true;
+        });
+
+        paper.addEventListener('gestureend', () => {
+          this.rotating = false;
+        });
+      }
+    }
+
+    function checkLastPaper() {
+      if (!lastPaperDragged) {
+        lastPaperDragged = true;
+        
+        setTimeout(() => {
+          const msg = document.getElementById('refreshMessage');
+          msg.style.display = 'block';
+          
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
+        }, 500);
+      }
+    }
+
+    const papers = Array.from(document.querySelectorAll('.paper'));
+    papers.forEach(paper => {
+      const p = new Paper();
+      p.init(paper);
+    });
+
+    // Prevent context menu on right-click
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+  </script>
 </body>
 </html>
