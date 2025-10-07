@@ -63,22 +63,27 @@
     }
 
     .paper.image {
-      padding: 10px;
+      padding: 15px;
+      max-width: 280px;
     }
 
     .paper.image p {
-      font-size: 24px;
-      margin: 5px 0;
+      font-size: 22px;
+      margin: 8px 0;
+      text-align: center;
     }
 
     img {
-      max-height: 180px;
-      max-width: 100%;
-      width: auto;
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: cover;
       user-select: none;
       display: block;
       margin: 10px auto;
       -webkit-user-drag: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     p {
@@ -117,71 +122,110 @@
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
+      body {
+        background-size: 800px;
+      }
+
       .paper {
-        padding: 15px 40px;
-        max-width: 90vw;
-      }
-
-      .paper.heart {
-        width: 120px;
-        height: 120px;
-      }
-
-      .paper.heart::after {
-        background-size: 90px;
+        padding: 12px 35px;
+        max-width: 85vw;
       }
 
       .paper.image {
-        padding: 8px;
+        padding: 12px;
+        max-width: 240px;
       }
 
       .paper.image p {
         font-size: 18px;
+        margin: 6px 0;
       }
 
       img {
-        max-height: 150px;
+        max-height: 350px;
+        border-radius: 6px;
+      }
+
+      .paper.heart {
+        width: 110px;
+        height: 110px;
+      }
+
+      .paper.heart::after {
+        background-size: 80px;
       }
 
       p {
-        font-size: 28px;
+        font-size: 26px;
       }
 
       .refresh-message {
         padding: 20px 30px;
-        font-size: 22px;
-        max-width: 80vw;
+        font-size: 20px;
+        max-width: 85vw;
       }
     }
 
     @media (max-width: 480px) {
+      body {
+        background-size: 600px;
+      }
+
       .paper {
-        padding: 10px 30px;
+        padding: 10px 25px;
+        max-width: 90vw;
       }
 
-      .paper.heart {
-        width: 100px;
-        height: 100px;
-      }
-
-      .paper.heart::after {
-        background-size: 70px;
+      .paper.image {
+        padding: 10px;
+        max-width: 200px;
       }
 
       .paper.image p {
         font-size: 16px;
+        margin: 5px 0;
       }
 
       img {
-        max-height: 120px;
+        max-height: 280px;
+        border-radius: 5px;
+      }
+
+      .paper.heart {
+        width: 90px;
+        height: 90px;
+      }
+
+      .paper.heart::after {
+        background-size: 65px;
       }
 
       p {
-        font-size: 22px;
+        font-size: 20px;
       }
 
       .refresh-message {
-        padding: 15px 25px;
+        padding: 15px 20px;
+        font-size: 18px;
+        max-width: 90vw;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .paper.image {
+        max-width: 180px;
+        padding: 8px;
+      }
+
+      .paper.image p {
+        font-size: 14px;
+      }
+
+      img {
+        max-height: 240px;
+      }
+
+      p {
         font-size: 18px;
       }
     }
